@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Proven Ground">
+<meta name="theme-color" content="#1c2536">
+<title>Proven Ground</title>
+<style>
+:root{--bg:#f1f3f7;--panel:#fff;--border:#d4d9e3;--dark:#e9ecf2;--navy:#1c2536;--navy-mid:#2a3650;--blue:#5b7fa6;--green:#2d9659;--green-dim:rgba(45,150,89,.1);--green-light:#d4f0e0;--orange:#d4782a;--orange-dim:rgba(212,120,42,.12);--orange-light:#fef0e2;--red:#c0392b;--red-light:#fce4e1;--purple:#6c5ea3;--purple-dim:rgba(108,94,163,.1);--text:#1c2536;--text-mid:#3e4a5e;--text-muted:#8892a4;
+--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+--font-mono:'SF Mono','Fira Code','Courier New',monospace;
+--font-display:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;min-height:100vh}
+button{cursor:pointer;font-family:var(--font-sans);transition:all .15s}button:active{opacity:.75}
+input,select,textarea{background:var(--dark);border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:var(--font-sans);font-size:13px;outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);background:#fff}
+input::placeholder,textarea::placeholder{color:var(--text-muted)}
+/* HEADER */
+#header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+#header-top{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 20px}
+#logo{display:flex;align-items:center;gap:8px}
+#logo-dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+#logo-text{font-family:var(--font-display);font-weight:800;font-size:17px;color:#fff;letter-spacing:.01em}
+#logo-text span{color:var(--orange)}
+#profile-btn{background:var(--navy-mid);border:none;border-radius:20px;padding:7px 14px;color:rgba(255,255,255,.75);font-size:12px;font-weight:500}
+/* BUBBLE TAB BAR */
+#tab-bar{max-width:960px;margin:0 auto;padding:10px 12px 8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+#tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{background:rgba(255,255,255,.1);border:none;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);white-space:nowrap;letter-spacing:.02em;flex-shrink:0}
+.tab-btn:hover{background:rgba(255,255,255,.18);color:rgba(255,255,255,.85)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 2px 8px rgba(212,120,42,.4)}
+/* CONTENT */
+#content{max-width:960px;margin:0 auto;padding:20px 16px}
+.tab-pane{display:none}.tab-pane.active{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* CARDS */
+.card{background:var(--panel);border:1.5px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:16px}
+.card-navy{background:var(--navy);border:none;border-radius:16px;padding:20px;margin-bottom:16px;color:#fff}
+.slbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;font-family:var(--font-mono);font-weight:500}
+.slbl-w{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;font-family:var(--font-mono)}
+/* STATS */
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat-card{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;flex:1;min-width:100px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;font-family:var(--font-mono)}
+.stat-value{font-size:21px;font-weight:700;font-family:var(--font-display)}
+.stat-unit{font-size:11px;color:var(--text-muted);margin-left:3px;font-family:var(--font-sans);font-weight:400}
+/* FORMS */
+.form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.form-field label{display:block;font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:4px}
+/* BUTTONS */
+.btn-primary{background:var(--orange);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600}
+.btn-green{background:var(--green);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600}
+.btn-ghost{background:transparent;color:var(--text-mid);border:1.5px solid var(--border);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:500}
+.btn-sm{padding:6px 12px!important;font-size:12px!important}
+/* INSIGHT */
+.insight-box{background:var(--dark);border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:14px;min-height:64px;white-space:pre-wrap;line-height:1.75;font-size:13.5px;color:var(--text-mid)}
+/* ALERTS */
+.alert-g{background:var(--green-light);border:1.5px solid rgba(45,150,89,.3);border-radius:12px;padding:11px 16px;font-size:13px;color:var(--green);font-weight:500;margin-bottom:16px}
+.alert-r{background:var(--red-light);border:1.5px solid rgba(192,57,43,.3);border-radius:12px;padding:11px 16px;font-size:13px;color:var(--red);font-weight:500;margin-bottom:16px}
+.alert-o{background:var(--orange-light);border:1.5px solid rgba(212,120,42,.3);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--text-mid);margin-bottom:16px}
+/* LOG ROWS */
+.log-row{background:var(--dark);border-radius:10px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+/* PILLS */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border-radius:20px;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--dark);color:var(--text-mid);font-family:var(--font-sans);transition:all .15s}
+.pill.ag{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+/* MACRO BARS */
+.macro-wrap{margin-bottom:12px}
+.macro-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text-mid);margin-bottom:5px;font-weight:500}
+.macro-labels span:last-child{font-family:var(--font-mono)}
+.macro-track{height:8px;background:var(--border);border-radius:4px}
+.macro-fill{height:8px;border-radius:4px;transition:width .4s}
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;border-radius:12px;padding:11px 20px;font-size:13px;font-weight:500;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.2);display:none;animation:fi .25s ease}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--panel);border:1.5px solid var(--border);border-radius:18px;padding:28px;width:480px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--text);margin-bottom:20px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fl{font-size:11px;color:var(--text-muted);font-weight:500;display:block;margin-bottom:4px}
+/* TAGS */
+.tag{background:var(--green-dim);border:1.5px solid rgba(45,150,89,.25);color:var(--green);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:600;display:inline-block;margin:3px}
+/* SUB TABS */
+.sub-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.sub-tab{background:var(--dark);border:1.5px solid var(--border);border-radius:20px;padding:7px 15px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer}
+.sub-tab.active{background:var(--orange-dim);border-color:var(--orange);color:var(--orange)}
+/* SCANNER */
+#scanner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#scanner-overlay.open{display:flex}
+#scanner-box{background:var(--panel);border-radius:18px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+#scan-frame{width:280px;height:180px;border:2.5px solid var(--orange);border-radius:12px;position:relative;overflow:hidden;background:#000}
+#scan-video{width:100%;height:100%;object-fit:cover}
+#scan-line{position:absolute;width:100%;height:2px;background:var(--orange);box-shadow:0 0 10px var(--orange);animation:sl 2s linear infinite}
+@keyframes sl{0%{top:0}100%{top:100%}}
+/* SET LOG TABLE */
+.set-table{width:100%;border-collapse:collapse;font-size:13px}
+.set-table th{text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;border-bottom:1.5px solid var(--border)}
+.set-table td{padding:7px 8px;border-bottom:1px solid var(--dark)}
+.set-table tr:last-child td{border-bottom:none}
+/* FOOD SEARCH RESULTS */
+.food-result-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--dark);transition:background .1s;display:flex;justify-content:space-between;align-items:center}
+.food-result-item:last-child{border-bottom:none}
+.food-result-item:hover,.food-result-item:active{background:var(--dark)}
+.food-result-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.food-result-macros{font-size:11px;color:var(--text-muted);font-family:var(--font-mono)}
+.food-result-cal{font-size:15px;font-weight:700;color:var(--navy);text-align:right}
+.food-result-cal-unit{font-size:10px;color:var(--text-muted)}
+/* ZONE 2 CARD */
+.zone-card{background:linear-gradient(135deg,#1c2536 0%,#2a3650 100%);border-radius:16px;padding:20px;margin-bottom:16px;color:#fff}
+.zone-badge{background:var(--green);color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:10px}
+/* SLEEP TRACKER */
+.sleep-ring{display:flex;align-items:center;justify-content:center;width:110px;height:110px;border-radius:50%;background:conic-gradient(var(--purple) 0% var(--pct,70%),var(--dark) var(--pct,70%) 100%);position:relative;margin:0 auto 12px}
+.sleep-ring-inner{position:absolute;width:82px;height:82px;border-radius:50%;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.edu-section{border-left:3px solid var(--orange);padding-left:14px;margin-bottom:16px}
+.edu-section h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.edu-section p{font-size:13px;color:var(--text-mid);line-height:1.65}
+/* FOOTER */
+#footer{text-align:center;padding:20px 16px;font-size:11px;color:var(--text-muted);border-top:1.5px solid var(--border);margin-top:8px}
+@media(max-width:480px){.stats-row{gap:8px}.stat-card{min-width:80px;padding:10px 12px}.stat-value{font-size:18px}.card{padding:16px}.form-row{gap:8px}.tab-btn{padding:7px 13px;font-size:11px}}
+</style>
+</head>
+<body>
+<div id="header">
+  <div id="header-top">
+    <div id="logo"><div id="logo-dot"></div><div id="logo-text">PROVEN<span> GROUND</span></div></div>
+    <button id="profile-btn" onclick="openProf()"></button>
+  </div>
+  <div id="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('body',this)">📊 Body</button>
+    <button class="tab-btn" onclick="switchTab('training',this)">🏋️ Training</button>
+    <button class="tab-btn" onclick="switchTab('nutrition',this)">🥗 Nutrition</button>
+    <button class="tab-btn" onclick="switchTab('goals',this)">🎯 Goals</button>
+    <button class="tab-btn" onclick="switchTab('sleep',this)">😴 Sleep</button>
+    <button class="tab-btn" onclick="switchTab('supps',this)">💊 Supplements</button>
+    <button class="tab-btn" onclick="switchTab('import',this)">📥 Import</button>
+  </div>
+</div>
+
+<div id="content">
+
+<!-- ═══ BODY TAB ═══ -->
+<div id="tab-body" class="tab-pane active">
+  <div class="stats-row" id="body-stats"></div>
+  <div id="body-delta"></div>
+  <div class="card"><div class="slbl">Weight & Composition Trend</div><canvas id="bodyChart" height="180"></canvas></div>
+  <div class="card">
+    <div class="slbl">Log Check-in</div>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date" id="b-date"></div>
+      <div class="form-field"><label>Weight (lbs)</label><input type="number" id="b-weight" placeholder="185" style="width:90px"></div>
+      <div class="form-field"><label>Body Fat %</label><input type="number" id="b-bf" placeholder="20" style="width:80px"></div>
+      <div class="form-field"><label>Waist (in)</label><input type="number" id="b-waist" placeholder="36" style="width:80px"></div>
+      <button class="btn-primary" onclick="saveBodyEntry()">+ Save</button>
+    </div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-size:12px;color:var(--text-muted)">Height (used for BMI):</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="number" id="b-height-ft" placeholder="5" style="width:55px" oninput="updateHeightFromFeet()">
+        <span style="font-size:12px;color:var(--text-muted)">ft</span>
+        <input type="number" id="b-height-in" placeholder="8" style="width:55px" oninput="updateHeightFromFeet()">
+        <span style="font-size:12px;color:var(--text-muted)">in</span>
+        <span style="font-size:12px;color:var(--text-muted)" id="height-display"></span>
+      </div>
+    </div>
+  </div>
+  <!-- BMI REFERENCE CARD -->
+  <div class="card" style="padding:16px 20px">
+    <div class="slbl" style="margin-bottom:10px">BMI Reference</div>
+    <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;font-size:11px;font-weight:600;text-align:center">
+      <div style="flex:1;background:#dbeafe;color:#1d4ed8;padding:7px 4px">Under 18.5<br>Underweight</div>
+      <div style="flex:1;background:#dcfce7;color:#15803d;padding:7px 4px">18.5–24.9<br>Normal</div>
+      <div style="flex:1;background:#fef9c3;color:#a16207;padding:7px 4px">25–29.9<br>Overweight</div>
+      <div style="flex:1;background:#fee2e2;color:#b91c1c;padding:7px 4px">30+<br>Obese</div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text-muted);line-height:1.6">BMI is a screening tool, not a diagnostic. It does not account for muscle mass — a person with high lean mass may have an "overweight" BMI while being metabolically healthy. Use alongside body fat % and waist circumference for a complete picture.</div>
+  </div>
+  <div class="card" id="body-hist-card" style="display:none"><div class="slbl">History</div><div id="body-hist"></div></div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="slbl" style="margin-bottom:0">Progress Analysis</div><button class="btn-primary btn-sm" onclick="analyzeBody()">Analyze</button></div>
+    <div class="insight-box" id="body-insight">Click Analyze to generate evidence-based insights.</div>
+  </div>
+</div>
+
+<!-- ═══ TRAINING TAB ═══ -->
+<div id="tab-training" class="tab-pane">
+
+  <!-- COACHING TIPS at top -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="slbl" style="margin-bottom:0">Coaching Tips</div><button class="btn-primary btn-sm" onclick="analyzeTraining()">Get Tips</button></div>
+    <div class="insight-box" id="train-insight">Click Get Tips for evidence-based coaching based on your log.</div>
+  </div>
+
+  <!-- VOLUME CHART -->
+  <div class="card" id="vol-card" style="display:none"><div class="slbl">Volume by Muscle — Last 10 Sessions</div><canvas id="volChart" height="160"></canvas></div>
+
+  <!-- LOG WORKOUT -->
+  <div class="card">
+    <div class="slbl">Log Workout</div>
+    <div class="form-row" style="margin-bottom:16px">
+      <div class="form-field"><label>Date</label><input type="date" id="s-date"></div>
+      <div class="form-field"><label>Session Type</label><select id="s-type"><option>Upper</option><option>Lower</option><option>Push</option><option>Pull</option><option>Full Body</option><option>Zone 2 Cardio</option><option>HIIT</option><option>Walk</option></select></div>
+    </div>
+    <div style="background:var(--dark);border-radius:12px;padding:14px 16px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:10px">Add Exercise</div>
+      <div class="form-row">
+        <div class="form-field" style="flex:2 1 140px"><label>Exercise Name</label><input type="text" id="e-name" placeholder="e.g. Lateral raise" style="width:100%" onkeydown="if(event.key==='Enter')addExercise()"></div>
+        <div class="form-field" style="flex:1 1 110px"><label>Muscle Group</label><select id="e-muscle" style="width:100%"><option>Shoulders</option><option>Chest</option><option>Back</option><option>Biceps</option><option>Triceps</option><option>Legs</option><option>Glutes</option><option>Core</option><option>Cardio</option></select></div>
+        <div style="align-self:flex-end"><button class="btn-primary" onclick="addExercise()">+ Add</button></div>
+      </div>
+    </div>
+    <div id="cur-ex"><div style="font-size:13px;color:var(--text-muted)">Add an exercise to begin.</div></div>
+    <div id="save-btn" style="display:none;margin-top:10px"><button class="btn-green" onclick="saveSession()">💾 Save Session</button></div>
+  </div>
+
+  <!-- RECENT SESSIONS -->
+  <div class="card" id="sessions-card" style="display:none"><div class="slbl">Recent Sessions</div><div id="sessions-list"></div></div>
+
+  <!-- ACTIVITY DATA -->
+  <div class="card">
+    <div class="slbl">Activity Data — Manual / Apple Health Export</div>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date" id="a-date"></div>
+      <div class="form-field"><label>Steps</label><input type="number" id="a-steps" placeholder="8500" style="width:85px"></div>
+      <div class="form-field"><label>Zone 2 Min</label><input type="number" id="a-z2" placeholder="45" style="width:75px"></div>
+      <div class="form-field"><label>HRV (ms)</label><input type="number" id="a-hrv" placeholder="45" style="width:75px"></div>
+      <div class="form-field"><label>Active Min</label><input type="number" id="a-min" placeholder="60" style="width:75px"></div>
+      <button class="btn-primary" onclick="saveActivity()">+ Log</button>
+    </div>
+    <div id="activity-list" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ZONE 2 EDUCATION — bottom -->
+  <div class="zone-card">
+    <div class="zone-badge">Zone 2 Training</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:8px">The Most Underrated Health Tool</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.7">Zone 2 cardio (60-70% max HR, conversational pace) is where mitochondrial adaptations are maximized. San Millán & Brooks' research shows Zone 2 is the primary driver of metabolic health, fat oxidation, and longevity — independent of high-intensity training.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;flex:1;min-width:110px"><div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">TARGET HR</div><div style="font-size:16px;font-weight:700" id="z2-hr">—</div></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;flex:1;min-width:110px"><div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">WEEKLY MIN</div><div style="font-size:16px;font-weight:700">150–180 min</div></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;flex:1;min-width:110px"><div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">SESSION</div><div style="font-size:16px;font-weight:700">45–60 min</div></div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,.6)">Talk test: full sentences but can't sing = Zone 2. 150 min/week reduces T2DM risk 58% (DPP, Knowler et al., 2002).</div>
+  </div>
+
+  <!-- POST-MEAL WALK — bottom -->
+  <div class="alert-o">
+    <div style="font-weight:700;margin-bottom:6px;color:var(--text)">🚶 Post-Meal Walking — Underestimated Glucose Tool</div>
+    <div style="font-size:13px;line-height:1.65">DiPietro et al. (2013, Diabetes Care): a 15-min walk after each meal reduces 24-hour blood glucose more than a single 45-min walk. Mechanism: muscle contraction drives GLUT4 translocation independent of insulin. Target: 10–15 min walk within 30 min of eating.</div>
+  </div>
+</div>
+
+<!-- ═══ NUTRITION TAB ═══ -->
+<div id="tab-nutrition" class="tab-pane">
+  <div class="stats-row" id="nutr-stats"></div>
+  <div class="card"><div class="slbl">Today's Macros</div><div id="macro-bars"></div></div>
+
+  <!-- LOG MEAL — smart search -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="slbl" style="margin-bottom:0">Log Meal</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="scan-msg" style="font-size:12px;color:var(--green);font-weight:500"></span>
+        <button class="btn-ghost btn-sm" onclick="openScanner()">📷 Scan Barcode</button>
+      </div>
+    </div>
+
+    <!-- MODE TOGGLE -->
+    <div style="display:flex;gap:0;background:var(--dark);border-radius:10px;padding:3px;margin-bottom:14px">
+      <button id="mode-search-btn" onclick="setFoodMode('search')" style="flex:1;border:none;border-radius:8px;padding:8px;font-size:12px;font-weight:600;background:var(--panel);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-family:var(--font-sans)">🔍 Search Food</button>
+      <button id="mode-manual-btn" onclick="setFoodMode('manual')" style="flex:1;border:none;border-radius:8px;padding:8px;font-size:12px;font-weight:600;background:transparent;color:var(--text-muted);font-family:var(--font-sans)">✏️ Enter Manually</button>
+    </div>
+
+    <!-- SEARCH MODE -->
+    <div id="food-mode-search">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Tap field to browse categories, or type to search</div>
+      <div style="position:relative">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none">🔍</span>
+        <input type="text" id="food-search"
+          placeholder="e.g. chicken, oatmeal, pistachios…"
+          style="width:100%;padding-left:36px"
+          oninput="onFoodSearch()"
+          onfocus="if(!selectedFood)showFoodCategories()"
+          onkeydown="if(event.key==='Escape'){$('food-results').style.display='none'}">
+      </div>
+      <div id="food-results" style="display:none;background:var(--panel);border:1.5px solid var(--border);border-radius:12px;margin-top:6px;overflow:hidden;overflow-y:auto;max-height:360px;box-shadow:0 4px 20px rgba(0,0,0,.12)"></div>
+
+      <!-- Confirm panel -->
+      <div id="meal-step-confirm" style="display:none;margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:14px;font-weight:700;color:var(--text)" id="confirm-name"></div>
+          <button onclick="resetMealForm()" style="background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:0 4px">✕</button>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px" id="confirm-serving-desc"></div>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px">
+          <div class="form-field">
+            <label>Servings</label>
+            <input type="number" id="m-serving" value="1" step="0.5" min="0.5" style="width:90px" oninput="updateServing()">
+          </div>
+          <div class="form-field"><label>Date</label><input type="date" id="m-date"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+          <div style="background:var(--dark);border-radius:10px;padding:10px;text-align:center"><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Cal</div><div style="font-size:20px;font-weight:700;color:var(--navy)" id="prev-cal">—</div></div>
+          <div style="background:var(--dark);border-radius:10px;padding:10px;text-align:center"><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Protein</div><div style="font-size:20px;font-weight:700;color:var(--green)" id="prev-prot">—</div></div>
+          <div style="background:var(--dark);border-radius:10px;padding:10px;text-align:center"><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Carbs</div><div style="font-size:20px;font-weight:700;color:var(--blue)" id="prev-carb">—</div></div>
+          <div style="background:var(--dark);border-radius:10px;padding:10px;text-align:center"><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Fat</div><div style="font-size:20px;font-weight:700;color:var(--orange)" id="prev-fat">—</div></div>
+        </div>
+        <button class="btn-green" onclick="confirmMeal()" style="width:100%;padding:13px;font-size:15px;border-radius:12px">✓ Add to Log</button>
+      </div>
+    </div>
+
+    <!-- MANUAL MODE — always reachable -->
+    <div id="food-mode-manual" style="display:none">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Enter any food with its macros. Check the nutrition label or use a resource like Cronometer.</div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="form-field" style="flex:1;min-width:200px"><label>Food name</label><input type="text" id="m-name" placeholder="e.g. Pistachios, roasted" style="width:100%"></div>
+        <div class="form-field"><label>Date</label><input type="date" id="m-date-manual"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+        <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Calories</label><input type="number" id="m-cal" placeholder="160" style="width:100%"></div>
+        <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Protein (g)</label><input type="number" id="m-prot" placeholder="6" style="width:100%"></div>
+        <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Carbs (g)</label><input type="number" id="m-carb" placeholder="8" style="width:100%"></div>
+        <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Fat (g)</label><input type="number" id="m-fat" placeholder="13" style="width:100%"></div>
+      </div>
+      <button class="btn-primary" onclick="saveMealManual()" style="width:100%;padding:12px;font-size:14px;border-radius:12px">+ Log Meal</button>
+    </div>
+
+    <!-- TODAY'S LOG -->
+    <div id="today-meals" style="margin-top:14px"></div>
+  </div>
+
+  <!-- NUTRITION FEEDBACK -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="slbl" style="margin-bottom:0">Nutrition Feedback</div><button class="btn-primary btn-sm" onclick="analyzeNutrition()">Analyze</button></div>
+    <div class="insight-box" id="nutr-insight">Click Analyze for personalized feedback.</div>
+  </div>
+
+  <!-- NUTRITION EDUCATION sub-tabs -->
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="switchNutrSub('foodorder',this)">Food Order</button>
+    <button class="sub-tab" onclick="switchNutrSub('fasting',this)">Fasting / TRE</button>
+    <button class="sub-tab" onclick="switchNutrSub('postmeal',this)">Post-Meal Walking</button>
+  </div>
+
+  <div id="nutr-sub-foodorder">
+    <div class="card">
+      <div class="slbl">Food Order & Foods to Avoid</div>
+      <div class="edu-section">
+        <h4>The Science of Meal Sequencing</h4>
+        <p>Shukla et al. (2015, Diabetes Care) RCT: eating vegetables and protein BEFORE carbohydrates reduced postprandial glucose by 29% at 30 min and 37% at 60 min, and reduced insulin response by 37%. GLP-1 (satiety hormone) was significantly higher. Replicated in prediabetes (Shukla et al., 2019).</p>
+      </div>
+      <div class="edu-section">
+        <h4>Practical Order — Every Meal</h4>
+        <p>① Non-starchy vegetables (salad, broccoli, spinach) → ② Protein (chicken, fish, eggs) → ③ Fat (olive oil, avocado, nuts) → ④ Starchy carbs LAST (rice, potato, bread)</p>
+      </div>
+      <div class="edu-section">
+        <h4>Examples</h4>
+        <p>Breakfast: Greek yogurt + berries → then oatmeal<br>Lunch: Side salad → grilled chicken → then rice<br>Dinner: Roasted vegetables → salmon → then sweet potato</p>
+      </div>
+      <div style="height:1px;background:var(--border);margin:16px 0"></div>
+      <div class="slbl">Foods to Limit</div>
+      <div style="font-size:13px;color:var(--text-mid);line-height:1.8">
+        1. <b>Sugar-sweetened beverages</b> — 26% increased T2DM risk per daily serving (Malik et al., 2010)<br>
+        2. <b>White bread & refined carbs</b> — rapid glucose spikes, worsens insulin resistance<br>
+        3. <b>Processed meats</b> — 42% increased T2DM risk (Pan et al., 2011)<br>
+        4. <b>Fried foods / trans fats</b> — raise LDL, lower HDL<br>
+        5. <b>Fruit juice</b> — glycemic response similar to soda (no fiber buffer)<br>
+        6. <b>Packaged snacks</b> — refined carbs + seed oils + hidden sodium<br>
+        7. <b>Excess alcohol</b> — raises triglycerides, impairs hepatic glucose output<br>
+        8. <b>High-sodium condiments</b> — aim &lt;2300mg/day (DASH trial)
+      </div>
+    </div>
+  </div>
+
+  <div id="nutr-sub-fasting" style="display:none">
+    <div class="card">
+      <div class="slbl">Intermittent Fasting & Time-Restricted Eating (TRE)</div>
+      <div class="edu-section">
+        <h4>What Is TRE?</h4>
+        <p>Time-restricted eating limits food intake to a consistent daily window — typically 8-10 hours — aligned with circadian biology. This is distinct from caloric restriction; the benefit comes from the timing itself. Satchin Panda's research at the Salk Institute has been central to this field.</p>
+      </div>
+      <div class="edu-section">
+        <h4>The Evidence</h4>
+        <p>Sutton et al. (2018, Cell Metabolism): early TRE (6-hour window, eating done by 3pm) improved insulin sensitivity, blood pressure, and oxidative stress in prediabetes — without weight loss. Wilkinson et al. (2020): 10-hour TRE over 12 weeks reduced weight, blood pressure, and LDL in metabolic syndrome. Meta-analysis (Liu et al., 2022, Obesity Reviews): TRE consistently reduced fasting glucose and body weight.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Circadian Alignment Matters</h4>
+        <p>Earlier eating windows (e.g. 7am–5pm or 8am–6pm) outperform late windows (12pm–8pm) for metabolic outcomes, because insulin sensitivity follows a circadian rhythm and peaks in the morning. Eating late disrupts circadian gene expression.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Practical Approaches</h4>
+        <p><b>16:8</b> — Fast 16 hours, eat within an 8-hour window (most popular, good starting point)<br><b>14:10</b> — More sustainable, still significant benefit. Good entry point.<br><b>Early TRE</b> — 7am–3pm or 8am–4pm, strongest metabolic data but hardest to maintain socially.<br><b>5:2</b> — 5 normal days, 2 days of very low calorie (500–600 kcal). Equivalent outcomes to daily TRE in some trials.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Who Should Be Cautious</h4>
+        <p>Those with a history of eating disorders, pregnant or breastfeeding women, those on insulin or sulfonylureas (hypoglycemia risk), and underweight individuals should consult a physician before starting TRE.</p>
+      </div>
+      <div class="alert-o" style="margin-top:4px">
+        <b>Key practical tip:</b> Start with a 12-hour fast (e.g. 7pm–7am) — this alone improves overnight glucose clearance and aligns with natural circadian biology. Build from there.
+      </div>
+    </div>
+  </div>
+
+  <div id="nutr-sub-postmeal" style="display:none">
+    <div class="card">
+      <div class="slbl">Post-Meal Walking</div>
+      <div class="edu-section">
+        <h4>The Evidence</h4>
+        <p>DiPietro et al. (2013, Diabetes Care): three 15-minute post-meal walks reduced 24-hour blood glucose significantly more than a single 45-minute morning walk. The effect was most pronounced after the evening meal. Mechanism: skeletal muscle contraction increases GLUT4 translocation to the cell membrane independent of insulin — a non-insulin-mediated glucose disposal pathway.</p>
+      </div>
+      <div class="edu-section">
+        <h4>How Much?</h4>
+        <p>Even 10 minutes at a casual pace produces measurable glucose-lowering effects. The benefit is dose-dependent — 15-20 minutes is optimal. Intensity matters less than getting moving; a gentle walk works.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Practical Strategy</h4>
+        <p>Build a post-meal walk into your routine as a non-negotiable habit. After dinner especially — this is when the largest glucose spike of the day typically occurs and when insulin sensitivity is lowest (circadian nadir). A 15-minute after-dinner walk can reduce that spike by 30-50% compared to sitting.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Beyond Glucose</h4>
+        <p>Post-meal walking also improves digestion and gut motility, reduces triglyceride response to a meal, supports circadian alignment, and accumulates meaningful daily step counts without dedicated exercise time.</p>
+      </div>
+      <div class="alert-o" style="margin-top:4px"><b>Simple target:</b> 10–15 minutes of walking within 30 minutes of each main meal. Park farther away, take stairs, or loop around the block — it all counts.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GOALS TAB ═══ -->
+<div id="tab-goals" class="tab-pane">
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="switchSub('diet',this)">Diet Plan</button>
+    <button class="sub-tab" onclick="switchSub('motiv',this)">Motivation</button>
+  </div>
+  <div id="sub-diet">
+    <div class="card"><div class="slbl">Health Conditions</div><div class="pill-row" id="cond-pills"></div></div>
+    <div class="card"><div class="slbl">Primary Goal</div><div class="pill-row" id="goal-pills"></div></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="slbl" style="margin-bottom:2px">Evidence-Based Diet Plan</div><div style="font-size:12px;color:var(--text-muted)" id="diet-sub"></div></div>
+        <button class="btn-primary btn-sm" onclick="genDiet()">Generate</button>
+      </div>
+      <div class="insight-box" id="diet-insight">Select conditions and goal above, then click Generate.</div>
+    </div>
+  </div>
+  <div id="sub-motiv" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="slbl" style="margin-bottom:2px">Behavioral Science Insights</div><div style="font-size:12px;color:var(--text-muted)">Evidence-based strategies from habit & psychology research</div></div>
+        <button class="btn-primary btn-sm" onclick="showMotiv()">Get Insights</button>
+      </div>
+      <div class="insight-box" id="motiv-insight">Click Get Insights.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLEEP TAB ═══ -->
+<div id="tab-sleep" class="tab-pane">
+
+  <!-- SLEEP STATS -->
+  <div class="stats-row" id="sleep-stats"></div>
+
+  <!-- LOG SLEEP -->
+  <div class="card">
+    <div class="slbl">Log Sleep</div>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date" id="sl-date"></div>
+      <div class="form-field"><label>Hours Slept</label><input type="number" id="sl-hrs" placeholder="7.5" step="0.5" style="width:85px"></div>
+      <div class="form-field"><label>Quality (1-10)</label><input type="number" id="sl-qual" placeholder="7" min="1" max="10" style="width:75px"></div>
+      <div class="form-field"><label>Bedtime</label><input type="time" id="sl-bed" style="width:100px"></div>
+      <div class="form-field"><label>Wake Time</label><input type="time" id="sl-wake" style="width:100px"></div>
+      <button class="btn-primary" onclick="saveSleep()">+ Log</button>
+    </div>
+  </div>
+
+  <!-- SLEEP HISTORY -->
+  <div class="card" id="sleep-hist-card" style="display:none">
+    <div class="slbl">Sleep History</div>
+    <canvas id="sleepChart" height="160"></canvas>
+    <div id="sleep-hist" style="margin-top:12px"></div>
+  </div>
+
+  <!-- SLEEP EDUCATION sub-tabs -->
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="switchSleepSub('why',this)">Why It Matters</button>
+    <button class="sub-tab" onclick="switchSleepSub('stages',this)">Sleep Stages</button>
+    <button class="sub-tab" onclick="switchSleepSub('tips',this)">Optimization Tips</button>
+    <button class="sub-tab" onclick="switchSleepSub('hrv',this)">HRV & Recovery</button>
+  </div>
+
+  <div id="sleep-sub-why">
+    <div class="card">
+      <div class="slbl">Why Sleep Is the Foundation</div>
+      <div class="edu-section">
+        <h4>Metabolic Health</h4>
+        <p>Spiegel et al. (1999, Lancet): just 6 days of sleep restriction to 4 hours impaired glucose tolerance by 40% and elevated cortisol — equivalent to a decade of aging in metabolic terms. Sleep deprivation reduces insulin sensitivity via elevated cortisol and growth hormone dysregulation. For prediabetes management, sleep is not optional.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Body Composition</h4>
+        <p>Nedeltcheva et al. (2010, Annals of Internal Medicine): subjects sleeping 5.5 hours vs 8.5 hours lost the same weight on a diet, but 55% of weight loss in the short-sleep group was lean mass vs. 25% in the full-sleep group. Poor sleep preserves fat and destroys muscle — the opposite of recomposition.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Hormonal Cascades</h4>
+        <p>Sleep deprivation increases ghrelin (hunger hormone) +24%, decreases leptin (satiety hormone) -18% (Taheri et al., 2004, PLOS Medicine), and elevates cortisol — all driving increased caloric intake, fat storage, and muscle breakdown. Matthew Walker describes this as "the perfect storm for weight gain."</p>
+      </div>
+      <div class="edu-section">
+        <h4>Cardiovascular & Longevity</h4>
+        <p>Cappuccio et al. (2011) meta-analysis: sleeping &lt;6 hours associated with 48% increased risk of cardiovascular disease and 15% increased all-cause mortality. The relationship is U-shaped — both under and over sleeping (&gt;9 hrs) carry risk.</p>
+      </div>
+      <div class="alert-o" style="margin-top:4px"><b>Target:</b> 7–9 hours of sleep is the evidence-based sweet spot for most adults (Hirshkowitz et al., 2015 — National Sleep Foundation consensus).</div>
+    </div>
+  </div>
+
+  <div id="sleep-sub-stages" style="display:none">
+    <div class="card">
+      <div class="slbl">Sleep Architecture</div>
+      <div class="edu-section">
+        <h4>Light Sleep (N1 & N2) — ~50% of sleep</h4>
+        <p>Transition to deeper sleep. N2 features sleep spindles important for memory consolidation. The body begins temperature drop and heart rate slows. Not restorative on its own but necessary as a gateway to deeper stages.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Deep Sleep / Slow Wave Sleep (N3) — ~20-25%</h4>
+        <p>The most physically restorative stage. Growth hormone secretion peaks here — critical for muscle repair, fat metabolism, and immune function. Primarily in the first half of the night. Alcohol, even moderate amounts, suppresses SWS by up to 24% (Ebrahim et al., 2013). This is where physical recovery happens.</p>
+      </div>
+      <div class="edu-section">
+        <h4>REM Sleep — ~20-25%</h4>
+        <p>Brain consolidates memory, processes emotions, and performs synaptic maintenance. REM is when dreaming occurs and emotional regulation is restored. REM pressure builds across the night — cutting sleep short eliminates disproportionate amounts of REM. Matthew Walker: "REM sleep is emotional first aid."</p>
+      </div>
+      <div class="edu-section">
+        <h4>Sleep Cycles</h4>
+        <p>Each cycle is ~90 minutes. A full night has 4-6 cycles. Early cycles are dominated by deep sleep; later cycles by REM. Waking after 6 hours misses the REM-rich final 2 hours disproportionately. Try to complete full cycles — wake at 90-minute intervals for less grogginess.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="sleep-sub-tips" style="display:none">
+    <div class="card">
+      <div class="slbl">Evidence-Based Sleep Optimization</div>
+      <div class="edu-section">
+        <h4>1. Temperature — The Most Powerful Lever</h4>
+        <p>Core body temperature must drop 1-2°F to initiate and maintain sleep. Walker: "You cannot fall asleep if your core temp doesn't drop." Keep bedroom at 65-67°F (18-19°C). A warm bath or shower 1-2 hours before bed paradoxically speeds sleep onset by pulling blood to extremities, accelerating core cooling.</p>
+      </div>
+      <div class="edu-section">
+        <h4>2. Light — Circadian Master Signal</h4>
+        <p>Morning sunlight (within 30-60 minutes of waking) anchors your circadian clock via retinal ganglion cells and melanopsin. This determines your cortisol peak and evening melatonin onset. Evening blue light from screens blocks melatonin by up to 50% and delays its onset by 3 hours (Gooley et al., 2011). Use blue light blocking glasses after sunset, or set devices to "Night Mode."</p>
+      </div>
+      <div class="edu-section">
+        <h4>3. Consistency — Regularity Beats Duration</h4>
+        <p>Your wake time is the primary anchor for your circadian rhythm. Even on weekends, a consistent wake time (within 30 min) prevents "social jet lag" — which impairs insulin sensitivity, mood, and cognitive function Monday through Thursday. Set a non-negotiable wake time.</p>
+      </div>
+      <div class="edu-section">
+        <h4>4. Caffeine — Later Than You Think</h4>
+        <p>Caffeine's half-life is 5-7 hours. A 2pm coffee still has 50% activity at 9pm. Adenosine (sleep pressure molecule) builds during the day — caffeine masks it but doesn't clear it. The "sleep debt" remains. Cut caffeine by 1pm for most people, 12pm if sensitive.</p>
+      </div>
+      <div class="edu-section">
+        <h4>5. Alcohol — Sleep Quality Destroyer</h4>
+        <p>Alcohol is sedating but fragments sleep, suppresses REM, and reduces SWS by 24% (Ebrahim et al., 2013). It dramatically increases snoring and sleep apnea severity. Even 1-2 drinks meaningfully impairs recovery sleep. Avoid within 3 hours of bed.</p>
+      </div>
+      <div class="edu-section">
+        <h4>6. Exercise Timing</h4>
+        <p>Regular exercise is one of the most effective interventions for sleep quality. However, vigorous exercise within 2 hours of bed can delay sleep onset via elevated core temperature and cortisol. Zone 2 cardio is ideal in the morning — it improves adenosine sensitivity and deepens slow-wave sleep.</p>
+      </div>
+      <div class="edu-section">
+        <h4>7. Key Supplements for Sleep</h4>
+        <p><b>Magnesium glycinate</b> (200-400mg at bedtime): reduces cortisol, improves sleep quality and duration (Abbasi et al., 2012).<br><b>Ashwagandha</b> (300-600mg KSM-66): reduces cortisol 27%, improves sleep onset (Salve et al., 2019).<br><b>Low-dose melatonin</b> (0.5-1mg, not 5-10mg): signals circadian shift, does not induce sleep. Best for jet lag or delayed sleep phase.<br><b>L-theanine</b> (200mg): promotes relaxation without sedation, reduces sleep onset latency.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="sleep-sub-hrv" style="display:none">
+    <div class="card">
+      <div class="slbl">HRV & Recovery</div>
+      <div class="edu-section">
+        <h4>What Is HRV?</h4>
+        <p>Heart Rate Variability measures the variation in time between heartbeats (in milliseconds). Higher HRV = more adaptable autonomic nervous system = better recovery, stress tolerance, and cardiovascular fitness. It's captured by Apple Watch, Oura Ring, Garmin, and Whoop.</p>
+      </div>
+      <div class="edu-section">
+        <h4>HRV as a Recovery Signal</h4>
+        <p>HRV reflects the balance between sympathetic ("fight or flight") and parasympathetic ("rest and digest") activity. A low HRV morning reading indicates your body is still recovering from yesterday's stressor (training, stress, alcohol, illness). Flinn et al. (2014): HRV-guided training produced greater fitness gains than predetermined programs, because athletes rested when recovery was incomplete.</p>
+      </div>
+      <div class="edu-section">
+        <h4>Normal Ranges</h4>
+        <p>HRV is highly individual — your trend matters more than absolute numbers. Men aged 40-50 typically range 30-60ms. More important: if your HRV drops >10-15% below your personal baseline, treat it as a recovery day (Zone 2 or rest). If elevated, it's a green light for intensity.</p>
+      </div>
+      <div class="edu-section">
+        <h4>What Improves HRV</h4>
+        <p>Regular Zone 2 aerobic training (strongest evidence), consistent sleep schedule, HRV-biofeedback breathing (5-6 breaths/min, "coherence breathing"), cold exposure, magnesium supplementation, stress reduction, reduced alcohol, and maintaining healthy body weight all improve baseline HRV.</p>
+      </div>
+      <div class="edu-section">
+        <h4>What Suppresses HRV</h4>
+        <p>Alcohol (even 1-2 drinks), sleep deprivation, overtraining, high psychological stress, illness, inflammatory foods, dehydration, and extreme caloric deficits all reduce HRV. Monitoring trends reveals which lifestyle factors most affect your personal recovery.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUPPLEMENTS TAB ═══ -->
+<div id="tab-supps" class="tab-pane">
+  <div class="card"><div class="slbl">Current Stack</div><div id="supp-stack"></div></div>
+  <div class="card">
+    <div class="slbl">Supplement Lookup</div>
+    <div style="display:flex;gap:10px">
+      <input type="text" id="supp-q" placeholder="e.g. magnesium, berberine, vitamin D…" style="flex:1" onkeydown="if(event.key==='Enter')lookupSupp()">
+      <button class="btn-primary" onclick="lookupSupp()">Look Up</button>
+    </div>
+    <div class="insight-box" id="supp-look">Type a supplement name and click Look Up.</div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="slbl" style="margin-bottom:2px">Personalized Stack Suggestions</div><div style="font-size:12px;color:var(--text-muted)">Based on your profile & current supplements</div></div>
+      <button class="btn-primary btn-sm" onclick="showSugg()">Suggestions</button>
+    </div>
+    <div class="insight-box" id="supp-sugg">Click Suggestions.</div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ IMPORT TAB ═══ -->
+<div id="tab-import" class="tab-pane">
+
+  <!-- HERO CARD -->
+  <div style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:16px;padding:22px;margin-bottom:16px;color:#fff">
+    <div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;font-family:var(--font-mono)">Apple Health Import</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:10px">Sync Your Health Data</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.7">Import your Apple Health export to automatically populate sleep logs, workouts, activity, weight, body fat, and HRV — no manual entry needed.</div>
+  </div>
+
+  <!-- STEP BY STEP -->
+  <div class="card">
+    <div class="slbl">How to Export from Apple Health</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="background:var(--orange);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">1</div>
+        <div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Open the Health app on your iPhone</div><div style="font-size:12px;color:var(--text-muted)">Tap your profile photo in the top right corner</div></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="background:var(--orange);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">2</div>
+        <div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Tap "Export All Health Data"</div><div style="font-size:12px;color:var(--text-muted)">Scroll to the bottom of your profile page. Tap Export, then confirm. This may take 1–2 minutes.</div></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="background:var(--orange);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">3</div>
+        <div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Save the ZIP file</div><div style="font-size:12px;color:var(--text-muted)">Share it to Files, iCloud Drive, or your computer. The file is named export.zip.</div></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <div style="background:var(--green);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">4</div>
+        <div><div style="font-weight:600;font-size:13px;margin-bottom:2px">Select the file below</div><div style="font-size:12px;color:var(--text-muted)">Tap "Choose export.zip" and select your file. Import runs instantly on your device — your data never leaves your phone.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPORT CARD -->
+  <div class="card">
+    <div class="slbl">Import Apple Health Data</div>
+
+    <!-- Date range filter -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px">
+      <div class="form-field"><label>Import data from</label><input type="date" id="imp-from" style="width:140px"></div>
+      <div class="form-field"><label>to</label><input type="date" id="imp-to" style="width:140px"></div>
+      <div style="font-size:12px;color:var(--text-muted);align-self:flex-end;padding-bottom:10px">Leave blank to import all data</div>
+    </div>
+
+    <!-- What to import checkboxes -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:10px">Select data to import:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;background:var(--dark);border-radius:8px;padding:10px 12px">
+          <input type="checkbox" id="imp-weight" checked style="width:16px;height:16px;accent-color:var(--green)"> <span>⚖️ Weight & Body Fat</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;background:var(--dark);border-radius:8px;padding:10px 12px">
+          <input type="checkbox" id="imp-sleep" checked style="width:16px;height:16px;accent-color:var(--green)"> <span>😴 Sleep</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;background:var(--dark);border-radius:8px;padding:10px 12px">
+          <input type="checkbox" id="imp-workouts" checked style="width:16px;height:16px;accent-color:var(--green)"> <span>🏋️ Workouts</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;background:var(--dark);border-radius:8px;padding:10px 12px">
+          <input type="checkbox" id="imp-activity" checked style="width:16px;height:16px;accent-color:var(--green)"> <span>🚶 Steps & HRV</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- File input -->
+    <div id="imp-dropzone" style="border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px" onclick="$('imp-file').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event)">
+      <div style="font-size:32px;margin-bottom:8px">📁</div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:4px">Tap to choose export.zip</div>
+      <div style="font-size:12px;color:var(--text-muted)">Or drag and drop the file here</div>
+      <input type="file" id="imp-file" accept=".zip,.xml" style="display:none" onchange="handleFileSelect(event)">
+    </div>
+
+    <!-- Progress / status -->
+    <div id="imp-status" style="display:none;background:var(--dark);border-radius:10px;padding:14px 16px;margin-bottom:14px">
+      <div id="imp-status-text" style="font-size:13px;color:var(--text-mid);margin-bottom:8px">Processing…</div>
+      <div style="height:6px;background:var(--border);border-radius:3px"><div id="imp-bar" style="height:6px;background:var(--green);border-radius:3px;width:0%;transition:width .3s"></div></div>
+    </div>
+
+    <!-- Results summary -->
+    <div id="imp-results" style="display:none"></div>
+  </div>
+
+  <!-- OTHER SOURCES -->
+  <div class="card">
+    <div class="slbl">Other Sources — Coming Soon</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--dark);border-radius:10px;padding:12px;text-align:center;opacity:.6">
+        <div style="font-size:20px;margin-bottom:4px">⌚</div>
+        <div style="font-size:12px;font-weight:600">Garmin Connect</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Via CSV export</div>
+      </div>
+      <div style="background:var(--dark);border-radius:10px;padding:12px;text-align:center;opacity:.6">
+        <div style="font-size:20px;margin-bottom:4px">💍</div>
+        <div style="font-size:12px;font-weight:600">Oura Ring</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Via CSV export</div>
+      </div>
+      <div style="background:var(--dark);border-radius:10px;padding:12px;text-align:center;opacity:.6">
+        <div style="font-size:20px;margin-bottom:4px">💪</div>
+        <div style="font-size:12px;font-weight:600">Whoop</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Via CSV export</div>
+      </div>
+      <div style="background:var(--dark);border-radius:10px;padding:12px;text-align:center;opacity:.6">
+        <div style="font-size:20px;margin-bottom:4px">🏃</div>
+        <div style="font-size:12px;font-weight:600">Fitbit</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Via CSV export</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:12px;line-height:1.6">Garmin, Oura, Whoop, and Fitbit all export CSV data that follows a similar pattern to Apple Health. CSV importers for each will be added in a future update. All processing is local — your data never leaves your device.</div>
+  </div>
+
+  <!-- PRIVACY NOTE -->
+  <div style="background:var(--green-dim);border:1.5px solid rgba(45,150,89,.2);border-radius:12px;padding:14px 16px;margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--green);margin-bottom:4px">🔒 Your data stays on your device</div>
+    <div style="font-size:12px;color:var(--text-mid);line-height:1.65">All import processing happens locally in your browser. Your health data is never uploaded to any server. The app has no backend — everything is stored in your browser's localStorage.</div>
+  </div>
+
+</div>
+<div id="footer">Proven Ground · Evidence-based health tracking · Not a substitute for medical advice</div>
+<div id="toast"></div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="prof-modal" onclick="if(event.target===this)closeProf()">
+  <div class="modal">
+    <div class="modal-title">Edit Profile</div>
+    <div class="mgrid">
+      <div><label class="fl">Name</label><input type="text" id="p-name" style="width:100%"></div>
+      <div><label class="fl">Age</label><input type="number" id="p-age" style="width:100%"></div>
+      <div><label class="fl">Weight (lbs)</label><input type="number" id="p-wt" style="width:100%"></div>
+      <div><label class="fl">Goal Weight</label><input type="number" id="p-gwt" style="width:100%"></div>
+      <div><label class="fl">Height (in)</label><input type="number" id="p-ht" style="width:100%"></div>
+      <div><label class="fl">Sex</label><select id="p-sex" style="width:100%"><option value="male">Male</option><option value="female">Female</option></select></div>
+      <div><label class="fl">Activity Level</label><select id="p-act" style="width:100%"><option value="sedentary">Sedentary</option><option value="light">Light</option><option value="moderate">Moderate</option><option value="active">Active</option><option value="veryactive">Very Active</option></select></div>
+    </div>
+    <div style="margin-bottom:12px"><label class="fl">Conditions (comma-separated)</label><input type="text" id="p-cond" style="width:100%"></div>
+    <div style="margin-bottom:20px"><label class="fl">Supplements (comma-separated)</label><input type="text" id="p-supp" style="width:100%"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn-ghost" onclick="closeProf()">Cancel</button><button class="btn-primary" onclick="saveProf()">Save</button></div>
+  </div>
+</div>
+
+<!-- SCANNER -->
+<div id="scanner-overlay" onclick="if(event.target===this)closeScanner()">
+  <div id="scanner-box">
+    <div style="font-family:var(--font-display);font-size:17px;font-weight:800;color:var(--text)">Scan Barcode</div>
+
+    <!-- Permission request screen (shown first) -->
+    <div id="scan-permission-ask">
+      <div style="text-align:center;padding:8px 0">
+        <div style="font-size:32px;margin-bottom:8px">📷</div>
+        <div style="font-size:13px;color:var(--text-mid);line-height:1.6;margin-bottom:16px">To scan a barcode, tap <b>Allow Camera</b> below and then allow access when your browser asks.</div>
+        <div style="font-size:12px;color:var(--text-muted);background:var(--dark);border-radius:8px;padding:10px;margin-bottom:16px;line-height:1.6">If you previously denied camera access: go to <b>Settings → Safari → Camera</b> and set to <b>Allow</b>, then try again.</div>
+        <button class="btn-primary" onclick="startCamera()" style="width:100%;padding:12px;font-size:14px;margin-bottom:10px">📷 Allow Camera & Scan</button>
+      </div>
+    </div>
+
+    <!-- Active camera screen (shown after permission granted) -->
+    <div id="scan-camera-active" style="display:none">
+      <div id="scan-frame"><video id="scan-video" muted playsinline></video><div id="scan-line"></div></div>
+      <div id="scan-status" style="font-size:12px;color:var(--text-mid);text-align:center;max-width:260px">Point camera at barcode</div>
+    </div>
+
+    <!-- Manual barcode entry (always visible) -->
+    <div style="width:100%;padding-top:4px">
+      <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:8px">— or type barcode number directly —</div>
+      <div style="display:flex;gap:8px">
+        <input type="number" id="scan-manual" placeholder="e.g. 034952507060" style="flex:1;min-width:0" onkeydown="if(event.key==='Enter')submitManual()">
+        <button class="btn-primary btn-sm" onclick="submitManual()">Lookup</button>
+      </div>
+    </div>
+    <button class="btn-ghost btn-sm" onclick="closeScanner()" style="width:100%">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DEF={name:"Travis",age:45,sex:"male",heightIn:68,weightLbs:185,goalWeight:175,activityLevel:"moderate",conditions:["prediabetes","hyperlipidemia"],goal:"Recomposition",supplements:["creatine","HMB","beta-alanine","fish oil"]};
+const SEED=[{date:"2026-01-15",weight:192,bodyfat:22,waist:38},{date:"2026-02-10",weight:190,bodyfat:21.5,waist:37.5},{date:"2026-03-05",weight:188,bodyfat:21,waist:37},{date:"2026-04-01",weight:186,bodyfat:20.5,waist:36.5},{date:"2026-04-20",weight:185,bodyfat:20,waist:36}];
+function sg(k,fb){try{const r=localStorage.getItem("pg2_"+k);return r?JSON.parse(r):fb}catch{return fb}}
+function ss(k,v){try{localStorage.setItem("pg2_"+k,JSON.stringify(v))}catch{}}
+let P=sg("profile",DEF),BL=sg("bodyLog",SEED),TL=sg("trainLog",[]),NL=sg("nutriLog",[]),AL=sg("actLog",[]),SL=sg("sleepLog",[]);
+let curEx=[],scanStream=null,selConds=[...P.conditions],selGoal=P.goal||"Recomposition";
+const $=id=>document.getElementById(id);
+function toDay(){return new Date().toISOString().slice(0,10)}
+function fmtD(d){return new Date(d+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+function lean(w,bf){return(w*(1-bf/100)).toFixed(1)}
+function fatM(w,bf){return(w*bf/100).toFixed(1)}
+function bmi(w,h){return((w/(h*h))*703).toFixed(1)}
+function tdee(p){const b=p.sex==="male"?88.36+13.4*(p.weightLbs*.453592)+4.8*(p.heightIn*2.54)-5.7*p.age:447.6+9.2*(p.weightLbs*.453592)+3.1*(p.heightIn*2.54)-4.3*p.age;return Math.round(b*({sedentary:1.2,light:1.375,moderate:1.55,active:1.725,veryactive:1.9}[p.activityLevel]||1.55))}
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2800)}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function switchTab(id,btn){document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));document.querySelectorAll("#tab-bar .tab-btn").forEach(b=>b.classList.remove("active"));$("tab-"+id).classList.add("active");btn.classList.add("active");if(id==="body"){rBody();initHeightFields()};if(id==="training"){rTrain();updateZ2HR()}if(id==="nutrition"){rNutr();resetMealForm();setFoodMode("search")};if(id==="goals")rGoals();if(id==="sleep")rSleep();if(id==="supps")rSupps();if(id==="import")rImport()}
+function switchSub(id,btn){$("sub-diet").style.display="none";$("sub-motiv").style.display="none";$("sub-"+id).style.display="block";document.querySelectorAll("#tab-goals .sub-tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active")}
+function switchNutrSub(id,btn){["foodorder","fasting","postmeal"].forEach(s=>$("nutr-sub-"+s).style.display="none");$("nutr-sub-"+id).style.display="block";document.querySelectorAll("#tab-nutrition .sub-tabs .sub-tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active")}
+function switchSleepSub(id,btn){["why","stages","tips","hrv"].forEach(s=>$("sleep-sub-"+s).style.display="none");$("sleep-sub-"+id).style.display="block";document.querySelectorAll("#tab-sleep .sub-tabs .sub-tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active")}
+
+// ── BODY TAB ──────────────────────────────────────────────────────────────────
+function updateHeightFromFeet(){
+  const ft=parseInt($("b-height-ft").value)||0;
+  const inches=parseInt($("b-height-in").value)||0;
+  const totalIn=ft*12+inches;
+  if(totalIn>0){
+    P.heightIn=totalIn;ss("profile",P);
+    const curWt=(BL[BL.length-1]||{}).weight||P.weightLbs;
+    $("height-display").textContent="= "+totalIn+'" · BMI: '+bmi(curWt,totalIn);
+    rBody();
+  }
+}
+function initHeightFields(){
+  const h=P.heightIn||68;
+  const ft=Math.floor(h/12), inches=h%12;
+  if($("b-height-ft"))$("b-height-ft").value=ft;
+  if($("b-height-in"))$("b-height-in").value=inches;
+  const curWt=(BL[BL.length-1]||{}).weight||P.weightLbs;
+  if($("height-display"))$("height-display").textContent="= "+h+'" · BMI: '+bmi(curWt,h);
+}
+function rBody(){
+  const last=BL[BL.length-1]||{},first=BL[0]||{};
+  $("b-date").value=toDay();
+  const curBMI = bmi(last.weight||P.weightLbs, P.heightIn);
+  const bmiColor = curBMI < 18.5 ? "var(--blue)" : curBMI < 25 ? "var(--green)" : curBMI < 30 ? "var(--orange)" : "var(--red)";
+  const bmiLabel = curBMI < 18.5 ? "Underweight" : curBMI < 25 ? "Normal" : curBMI < 30 ? "Overweight" : "Obese";
+  $("body-stats").innerHTML=`
+    <div class="stat-card"><div class="stat-label">Current Weight</div><div class="stat-value" style="color:var(--navy)">${last.weight||P.weightLbs}<span class="stat-unit">lbs</span></div></div>
+    <div class="stat-card"><div class="stat-label">BMI</div><div class="stat-value" style="color:${bmiColor}">${curBMI}<span class="stat-unit">${bmiLabel}</span></div></div>
+    <div class="stat-card"><div class="stat-label">Body Fat</div><div class="stat-value" style="color:var(--blue)">${last.bodyfat||"—"}<span class="stat-unit">%</span></div></div>
+    <div class="stat-card"><div class="stat-label">Lean Mass</div><div class="stat-value" style="color:var(--green)">${last.bodyfat?lean(last.weight,last.bodyfat):"—"}<span class="stat-unit">lbs</span></div></div>
+    <div class="stat-card"><div class="stat-label">Goal</div><div class="stat-value" style="color:var(--orange)">${P.goalWeight}<span class="stat-unit">lbs</span></div></div>`;
+  if(last.weight&&first.weight){const d=(last.weight-first.weight).toFixed(1);$("body-delta").innerHTML=`<div class="${+d<0?"alert-g":"alert-r"}">${+d<0?"↓":"↑"} ${Math.abs(d)} lbs since ${fmtD(first.date)} · TDEE: ${tdee(P)} kcal · BMI: ${bmi(last.weight,P.heightIn)}</div>`}else $("body-delta").innerHTML="";
+  setTimeout(drawBodyChart,50);
+  if(BL.length>0){$("body-hist-card").style.display="block";$("body-hist").innerHTML=[...BL].reverse().slice(0,8).map((e,i)=>`<div class="log-row"><span style="color:var(--text-muted);min-width:64px">${fmtD(e.date)}</span><span style="font-family:var(--font-mono);font-size:12px">${e.weight} lbs${e.bodyfat?` · ${e.bodyfat}% BF`:""}${e.waist?` · ${e.waist}"`:""}</span><button onclick="delBody(${BL.length-1-i})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px">×</button></div>`).join("")}else $("body-hist-card").style.display="none";
+}
+function saveBodyEntry(){const w=$("b-weight").value;if(!w)return;BL=[...BL,{date:$("b-date").value,weight:+w,bodyfat:$("b-bf").value?+$("b-bf").value:null,waist:$("b-waist").value?+$("b-waist").value:null}].sort((a,b)=>a.date.localeCompare(b.date));ss("bodyLog",BL);$("b-weight").value="";$("b-bf").value="";$("b-waist").value="";rBody();toast("✓ Check-in saved")}
+function delBody(i){BL=BL.filter((_,x)=>x!==i);ss("bodyLog",BL);rBody();toast("Removed")}
+function analyzeBody(){
+  const last=BL[BL.length-1]||{},first=BL[0]||{};
+  if(!last.weight||!first.weight){$("body-insight").textContent="Log at least 2 check-ins to generate analysis.";return}
+  const wd=last.weight-first.weight,wks=Math.max(1,Math.round((new Date(last.date)-new Date(first.date))/(7*864e5))),rate=(wd/wks).toFixed(2);
+  const lf=first.bodyfat?+lean(first.weight,first.bodyfat):null,ll=last.bodyfat?+lean(last.weight,last.bodyfat):null,ld=lf&&ll?(ll-lf).toFixed(1):null;
+  let o=`Progress: ${wks} weeks · ${wd>0?"+":""}${wd.toFixed(1)} lbs total · ${rate} lbs/week\n\n`;
+  if(ld!==null){o+=`Lean mass change: ${+ld>0?"+":""}${ld} lbs. `;if(+ld>=0&&wd<0)o+="Ideal recomposition — fat loss with lean mass preservation. Barakat et al. (2020) confirmed this with high protein + resistance training.\n\n";else if(+ld<0)o+="Some lean mass loss. Increase protein to 0.82 g/lb per Helms et al. (2014) and maintain progressive overload.\n\n";else o+="\n\n";}
+  if(Math.abs(+rate)>1.5)o+="Rate exceeds 1.5 lbs/week. Helms et al. recommends 0.5-1% BW/week to preserve lean mass. Consider a smaller deficit.\n\n";
+  o+=`TDEE: ~${tdee(P)} kcal/day. Target 300-500 kcal deficit for recomposition.\n\n`;
+  if(P.conditions.includes("prediabetes"))o+="Every 1 kg loss reduces T2DM risk ~16% (DPP, Knowler et al., 2002). Your trajectory is clinically meaningful.\n\n";
+  if(P.conditions.includes("hyperlipidemia"))o+="5-10% weight loss improves LDL 5-8% and TG 15-20% (NCEP ATP III).";
+  $("body-insight").textContent=o.trim();
+}
+function drawBodyChart(){
+  const c=$("bodyChart");if(!c)return;const ctx=c.getContext("2d");
+  const W=c.parentElement.offsetWidth-40||300;c.width=W;c.height=180;ctx.clearRect(0,0,W,180);
+  if(BL.length<1){ctx.fillStyle="#94a3b8";ctx.font="13px sans-serif";ctx.textAlign="center";ctx.fillText("Log check-ins to see your trend",W/2,90);return}
+  const wts=BL.map(e=>e.weight),minW=Math.min(...wts,P.goalWeight)-3,maxW=Math.max(...wts)+3;
+  const pl=32,pr=20,pt=10,pb=30,cW=W-pl-pr,cH=170-pt-pb;
+  const xp=i=>pl+i*(cW/(BL.length-1||1)),yp=v=>pt+cH-(v-minW)/(maxW-minW)*cH;
+  ctx.strokeStyle="#d4d9e3";ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(f=>{const y=pt+cH*f;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(W-pr,y);ctx.stroke();ctx.fillStyle="#8892a4";ctx.font="10px monospace";ctx.textAlign="right";ctx.fillText((maxW-(maxW-minW)*f).toFixed(0),pl-4,y+3)});
+  if(P.goalWeight>=minW&&P.goalWeight<=maxW){const gy=yp(P.goalWeight);ctx.strokeStyle="#d4782a";ctx.setLineDash([5,4]);ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pl,gy);ctx.lineTo(W-pr,gy);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#d4782a";ctx.font="10px sans-serif";ctx.textAlign="left";ctx.fillText("Goal",W-pr+2,gy+3)}
+  ctx.strokeStyle="#1c2536";ctx.lineWidth=2.5;ctx.setLineDash([]);ctx.beginPath();BL.forEach((e,i)=>i===0?ctx.moveTo(xp(i),yp(e.weight)):ctx.lineTo(xp(i),yp(e.weight)));ctx.stroke();
+  BL.forEach((e,i)=>{ctx.fillStyle="#1c2536";ctx.beginPath();ctx.arc(xp(i),yp(e.weight),4,0,Math.PI*2);ctx.fill()});
+  if(BL.some(e=>e.bodyfat)){ctx.strokeStyle="#2d9659";ctx.lineWidth=2;ctx.beginPath();let f=true;BL.forEach((e,i)=>{if(!e.bodyfat)return;const y=yp(+lean(e.weight,e.bodyfat));f?ctx.moveTo(xp(i),y):ctx.lineTo(xp(i),y);f=false});ctx.stroke()}
+  ctx.fillStyle="#8892a4";ctx.font="10px sans-serif";ctx.textAlign="center";const step=Math.max(1,Math.floor(BL.length/5));BL.forEach((e,i)=>{if(i%step===0)ctx.fillText(fmtD(e.date),xp(i),168)});
+}
+
+// ── TRAINING TAB ──────────────────────────────────────────────────────────────
+function updateZ2HR(){const maxHR=220-P.age;$("z2-hr").textContent=`${Math.round(maxHR*.6)}–${Math.round(maxHR*.7)} bpm`}
+function rTrain(){$("s-date").value=toDay();$("a-date").value=toDay();renderEx();renderSessions();renderActivity();setTimeout(drawVolChart,50)}
+function addExercise(){
+  const n=$("e-name").value.trim();if(!n)return;
+  const ex={name:n,muscle:$("e-muscle").value,sets:[]};
+  curEx.push(ex);
+  $("e-name").value="";renderEx();
+}
+function addSet(idx){
+  const r=+$(`set-r-${idx}`).value||0,w=+$(`set-w-${idx}`).value||0;
+  if(!r&&!w)return;
+  curEx[idx].sets.push({reps:r,weight:w});
+  $(`set-r-${idx}`).value="";$(`set-w-${idx}`).value="";
+  renderEx();
+}
+function renderEx(){
+  if(!curEx.length){$("cur-ex").innerHTML=`<div style="font-size:13px;color:var(--text-muted)">Add an exercise above to begin.</div>`;$("save-btn").style.display="none";return}
+  let html=`<div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:10px">Current Session — ${curEx.length} exercise${curEx.length!==1?"s":""}</div>`;
+  curEx.forEach((ex,i)=>{
+    html+=`<div style="background:var(--dark);border-radius:12px;padding:12px 14px;margin-bottom:10px">`;
+    html+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:700;font-size:14px">${ex.name}</span><span style="font-size:11px;color:var(--text-muted);background:var(--panel);padding:2px 8px;border-radius:10px">${ex.muscle}</span></div>`;
+    if(ex.sets.length){
+      html+=`<table class="set-table" style="margin-bottom:8px"><tr><th>Set</th><th>Reps</th><th>Weight (lbs)</th><th>Vol</th></tr>`;
+      ex.sets.forEach((s,si)=>html+=`<tr><td style="color:var(--text-muted)">${si+1}</td><td style="font-weight:600">${s.reps}</td><td>${s.weight}</td><td style="color:var(--blue);font-family:var(--font-mono)">${(s.reps*s.weight).toFixed(0)}</td></tr>`);
+      html+=`</table>`;
+    }
+    html+=`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input type="number" id="set-r-${i}" placeholder="Reps" style="width:70px"><input type="number" id="set-w-${i}" placeholder="lbs" style="width:70px"><button class="btn-green btn-sm" onclick="addSet(${i})">+ Set</button><button onclick="remEx(${i})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;margin-left:auto">Remove exercise</button></div>`;
+    html+=`</div>`;
+  });
+  $("cur-ex").innerHTML=html;
+  $("save-btn").style.display="block";
+}
+function remEx(i){curEx.splice(i,1);renderEx()}
+function saveSession(){
+  if(!curEx.length)return;
+  const exWithSets=curEx.map(ex=>({...ex,totalSets:ex.sets.length,totalReps:ex.sets.reduce((a,s)=>a+s.reps,0)}));
+  TL=[{id:Date.now(),date:$("s-date").value,type:$("s-type").value,exercises:exWithSets},...TL];
+  ss("trainLog",TL);curEx=[];renderEx();renderSessions();drawVolChart();toast("✓ Session saved");
+}
+function renderSessions(){
+  if(!TL.length){$("sessions-card").style.display="none";return}
+  $("sessions-card").style.display="block";
+  $("sessions-list").innerHTML=TL.slice(0,6).map(s=>`<div class="log-row"><div><div style="font-weight:600">${s.type} — ${fmtD(s.date)}</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">${s.exercises?.length} exercises · ${[...new Set(s.exercises?.map(e=>e.muscle))].join(", ")}</div></div><button class="btn-ghost btn-sm" onclick="delSession(${s.id})">Remove</button></div>`).join("");
+}
+function delSession(id){TL=TL.filter(s=>s.id!==id);ss("trainLog",TL);renderSessions();drawVolChart();toast("Removed")}
+function saveActivity(){
+  const e={id:Date.now(),date:$("a-date").value,steps:+$("a-steps").value||0,z2min:+$("a-z2").value||0,hrv:+$("a-hrv").value||0,activeMin:+$("a-min").value||0};
+  AL=[e,...AL];ss("actLog",AL);
+  $("a-steps").value="";$("a-z2").value="";$("a-hrv").value="";$("a-min").value="";
+  renderActivity();toast("✓ Activity logged");
+}
+function renderActivity(){
+  if(!AL.length){$("activity-list").innerHTML="";return}
+  $("activity-list").innerHTML=AL.slice(0,5).map(a=>`<div class="log-row"><span style="min-width:64px;color:var(--text-muted)">${fmtD(a.date)}</span><span style="font-family:var(--font-mono);font-size:12px">${a.steps?a.steps.toLocaleString()+" steps":""} ${a.z2min?"· Z2: "+a.z2min+"m":""} ${a.hrv?"· HRV: "+a.hrv+"ms":""} ${a.activeMin?"· "+a.activeMin+"min active":""}</span><button onclick="delActivity(${a.id})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">×</button></div>`).join("");
+}
+function delActivity(id){AL=AL.filter(a=>a.id!==id);ss("actLog",AL);renderActivity();toast("Removed")}
+function analyzeTraining(){
+  const vm={};TL.slice(0,10).forEach(s=>s.exercises?.forEach(e=>{const reps=e.sets?e.sets.reduce((a,s)=>a+s.reps,0):e.totalReps||0;vm[e.muscle]=(vm[e.muscle]||0)+reps}));
+  const total=Math.min(TL.length,10),sv=vm["Shoulders"]||0;
+  const z2total=AL.slice(0,10).reduce((a,e)=>a+(e.z2min||0),0);
+  let o="Training Analysis:\n\n";
+  o+=`1. Shoulder Volume: ${sv} total reps in last ${total} sessions. Schoenfeld et al. (2017): 10+ weekly sets needed for hypertrophy. Target 15-20 sets: lateral raises (lateral delt), OHP (anterior delt), face pulls (posterior delt).\n\n`;
+  const ms=Object.keys(vm),miss=["Shoulders","Back","Legs","Chest"].filter(m=>!ms.includes(m));
+  if(miss.length)o+=`2. Missing groups: ${miss.join(", ")}. Balanced programming prevents compensatory injury.\n\n`;
+  else o+=`2. Good coverage across ${ms.length} muscle groups. Maintain 2x/week frequency (Schoenfeld et al., 2016).\n\n`;
+  o+=`3. Zone 2 logged: ${z2total} min in last 10 activity entries. Target: 150-180 min/week for metabolic health (DPP, Knowler 2002). ${z2total<100?"Consider adding Zone 2 sessions":"Good aerobic base"}.\n\n`;
+  o+="4. Progressive Overload: Increase load 2.5-5% when all target reps are hit for 2 consecutive sessions. Track per-exercise — overload is the primary driver of adaptation (Kraemer & Ratamess, 2004).";
+  $("train-insight").textContent=o;
+}
+function drawVolChart(){
+  const c=$("volChart");if(!c)return;
+  const vm={};TL.slice(0,10).forEach(s=>s.exercises?.forEach(e=>{const reps=e.sets?e.sets.reduce((a,s)=>a+s.reps,0):e.totalReps||0;vm[e.muscle]=(vm[e.muscle]||0)+reps}));
+  const entries=Object.entries(vm).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length){$("vol-card").style.display="none";return}
+  $("vol-card").style.display="block";
+  const W=c.parentElement.offsetWidth-40||300,H=entries.length*30+20;
+  c.width=W;c.height=H;const ctx=c.getContext("2d");ctx.clearRect(0,0,W,H);
+  const maxV=Math.max(...entries.map(e=>e[1])),pl=80,pr=20,pt=5;
+  entries.forEach(([m,v],i)=>{const y=pt+i*30,bW=Math.max(4,(v/maxV)*(W-pl-pr));ctx.fillStyle="rgba(91,127,166,.85)";ctx.beginPath();if(ctx.roundRect)ctx.roundRect(pl,y,bW,20,4);else ctx.rect(pl,y,bW,20);ctx.fill();ctx.fillStyle="#3e4a5e";ctx.font="12px sans-serif";ctx.textAlign="right";ctx.fillText(m,pl-6,y+14);ctx.fillStyle="#fff";ctx.font="11px monospace";ctx.textAlign="left";if(bW>30)ctx.fillText(v,pl+bW-28,y+14)});
+  c.height=H;
+}
+
+// ── NUTRITION TAB ─────────────────────────────────────────────────────────────
+function setFoodMode(mode){
+  const isSearch = mode==='search';
+  $("food-mode-search").style.display = isSearch ? "block" : "none";
+  $("food-mode-manual").style.display = isSearch ? "none" : "block";
+  $("mode-search-btn").style.background = isSearch ? "var(--panel)" : "transparent";
+  $("mode-search-btn").style.color = isSearch ? "var(--text)" : "var(--text-muted)";
+  $("mode-search-btn").style.boxShadow = isSearch ? "0 1px 4px rgba(0,0,0,.1)" : "none";
+  $("mode-manual-btn").style.background = !isSearch ? "var(--panel)" : "transparent";
+  $("mode-manual-btn").style.color = !isSearch ? "var(--text)" : "var(--text-muted)";
+  $("mode-manual-btn").style.boxShadow = !isSearch ? "0 1px 4px rgba(0,0,0,.1)" : "none";
+  if(mode==='manual' && $("m-date-manual")) $("m-date-manual").value = toDay();
+}
+// ── FOOD DATABASE — 350+ foods ────────────────────────────────────────────────
+const FDB = {
+"Chicken Breast, grilled":[165,31,0,3.6,"100g"],"Chicken Thigh, grilled":[209,26,0,11,"100g"],
+"Chicken Wing, cooked":[290,27,0,19,"100g"],"Rotisserie Chicken, breast":[153,28,0,3.5,"100g"],
+"Ground Turkey, cooked":[200,24,0,11,"100g"],"Turkey Breast, roasted":[135,30,0,1,"100g"],
+"Turkey Breast, deli sliced":[104,20,2,1.6,"100g"],"Ground Beef 90/10, cooked":[196,26,0,10,"100g"],
+"Ground Beef 80/20, cooked":[254,24,0,17,"100g"],"Steak, sirloin cooked":[207,28,0,10,"100g"],
+"Steak, ribeye cooked":[291,26,0,20,"100g"],"Steak, flank cooked":[192,28,0,8.5,"100g"],
+"Ground Beef Burger patty":[295,24,0,21,"1 patty (113g)"],"Pork Tenderloin, cooked":[143,26,0,3.5,"100g"],
+"Pork Chop, cooked":[231,25,0,14,"100g"],"Bacon, cooked":[541,37,1.4,42,"100g"],
+"Ham, deli sliced":[107,17,1.5,3.8,"100g"],"Italian Sausage, cooked":[323,14,2,29,"100g"],
+"Salmon, wild Atlantic":[208,20,0,13,"100g"],"Salmon, farmed":[234,25,0,14,"100g"],
+"Tilapia, cooked":[128,26,0,2.7,"100g"],"Tuna, canned in water":[116,25,0,1,"100g"],
+"Tuna, canned in oil":[198,29,0,8.1,"100g"],"Tuna Steak, cooked":[184,30,0,6.3,"100g"],
+"Shrimp, cooked":[99,24,0,0.3,"100g"],"Cod, baked":[105,23,0,0.9,"100g"],
+"Halibut, cooked":[140,27,0,2.9,"100g"],"Mahi-mahi, cooked":[109,24,0,0.9,"100g"],
+"Sardines, canned in oil":[208,25,0,11,"100g"],"Sardines, canned in water":[130,22,0,4.5,"100g"],
+"Trout, cooked":[190,26,0,9,"100g"],"Scallops, cooked":[111,23,5,1,"100g"],
+"Crab, cooked":[97,19,0,2,"100g"],"Lobster, cooked":[89,19,0,0.9,"100g"],
+"Egg, large whole":[72,6,0.4,5,"1 egg (50g)"],"Egg White":[52,11,0.7,0.2,"100g"],
+"Hard Boiled Egg":[155,13,1.1,11,"100g"],"Scrambled Eggs (2 large)":[182,12,1,14,"2 eggs cooked"],
+"Scrambled Eggs (3 large)":[273,18,1.5,21,"3 eggs cooked"],
+"Greek Yogurt, plain nonfat":[59,10,3.6,0.4,"100g"],"Greek Yogurt, plain 2%":[73,9,4,2,"100g"],
+"Greek Yogurt, plain whole":[97,9,3.8,5,"100g"],"Yogurt, plain whole milk":[61,3.5,4.7,3.3,"100g"],
+"Cottage Cheese, low-fat":[72,12,3,1,"100g"],"Cottage Cheese, full fat":[98,11,3.4,4.5,"100g"],
+"Ricotta, part-skim":[138,11,5.1,7.9,"100g"],"Cheddar Cheese":[402,25,1.3,33,"100g"],
+"Mozzarella, part-skim":[254,25,2.2,16,"100g"],"Mozzarella, fresh":[280,17,2.2,22,"100g"],
+"Parmesan Cheese":[431,38,4,29,"100g"],"Feta Cheese":[264,14,4,21,"100g"],
+"Swiss Cheese":[380,27,5.4,28,"100g"],"Cream Cheese":[99,1.7,1.2,10,"2 tbsp (28g)"],
+"String Cheese":[80,7,0,5,"1 stick (28g)"],
+"Whey Protein Powder":[120,24,3,1.5,"1 scoop (30g)"],"Protein Bar (avg)":[200,20,22,7,"1 bar (60g)"],
+"Protein Shake premade (avg)":[160,30,7,3,"1 bottle"],
+"Tofu, firm":[76,8,1.9,4.2,"100g"],"Tofu, silken":[55,5.3,2.4,2.7,"100g"],
+"Tempeh":[193,19,9,11,"100g"],"Edamame, shelled":[121,11,9,5,"100g"],
+"Seitan":[370,75,14,2,"100g"],"Lentils, cooked":[116,9,20,0.4,"100g"],
+"Black Beans, cooked":[132,8.9,24,0.5,"100g"],"Chickpeas, cooked":[164,8.9,27,2.6,"100g"],
+"Kidney Beans, cooked":[127,8.7,23,0.5,"100g"],"Pinto Beans, cooked":[143,9,26,0.7,"100g"],
+"Navy Beans, cooked":[140,8.2,26,0.5,"100g"],"White Beans, cooked":[139,9.7,25,0.4,"100g"],
+"Soybeans, cooked":[173,17,10,9,"100g"],"Split Peas, cooked":[118,8.3,21,0.4,"100g"],
+"White Rice, cooked":[130,2.7,28,0.3,"100g"],"Brown Rice, cooked":[112,2.6,23,0.9,"100g"],
+"Jasmine Rice, cooked":[129,2.7,28,0.3,"100g"],"Basmati Rice, cooked":[121,3.5,25,0.4,"100g"],
+"Cauliflower Rice, cooked":[25,2,5,0.3,"100g"],"Wild Rice, cooked":[101,4,21,0.3,"100g"],
+"Oatmeal, cooked":[71,2.5,12,1.5,"100g"],"Oats, dry rolled":[389,17,66,7,"100g"],
+"Steel Cut Oats, cooked":[68,2.5,12,1.4,"100g"],"Overnight Oats":[350,12,52,8,"1 jar"],
+"Quinoa, cooked":[120,4.4,21,1.9,"100g"],"Farro, cooked":[170,6,34,1.5,"100g"],
+"Barley, cooked":[123,2.3,28,0.4,"100g"],"Bulgur, cooked":[83,3.1,18,0.2,"100g"],
+"Whole Wheat Bread":[247,13,41,4.2,"100g"],"White Bread":[265,9,49,3.2,"100g"],
+"Sourdough Bread":[274,9,53,2,"100g"],"Rye Bread":[259,8.5,48,3.3,"100g"],
+"Whole Wheat Tortilla (medium)":[146,4,24,3.5,"1 tortilla (45g)"],
+"Flour Tortilla (large)":[218,5.9,37,5,"1 tortilla (72g)"],
+"Pita Bread (whole wheat)":[266,11,47,2.6,"100g"],
+"English Muffin, whole wheat":[134,5.9,26,1.5,"1 muffin (57g)"],
+"Bagel, plain":[245,9.7,48,1.5,"1 bagel (98g)"],
+"Pasta, cooked":[131,5,25,1.1,"100g"],"Pasta, whole wheat cooked":[124,5.3,26,0.5,"100g"],
+"Udon Noodles, cooked":[132,3.5,27,0.6,"100g"],"Soba Noodles, cooked":[99,5,21,0.1,"100g"],
+"Rice Noodles, cooked":[109,1.8,25,0.2,"100g"],
+"Sweet Potato, baked":[90,2,21,0.1,"100g"],"Potato, baked":[93,2.5,21,0.1,"100g"],
+"Potato, boiled":[87,1.9,20,0.1,"100g"],"French Fries":[274,3,33,14,"100g"],
+"Mashed Potatoes (butter, milk)":[113,2,17,4,"100g"],"Corn, cooked":[86,3.3,19,1.4,"100g"],
+"Yam, cooked":[116,1.5,28,0.1,"100g"],"Couscous, cooked":[112,3.8,23,0.2,"100g"],
+"Apple (medium)":[95,0.5,25,0.3,"1 apple (182g)"],"Apple, sliced":[52,0.3,14,0.2,"100g"],
+"Banana (medium)":[105,1.3,27,0.4,"1 banana (118g)"],"Banana, large":[121,1.5,31,0.4,"1 large (136g)"],
+"Blueberries":[57,0.7,14,0.3,"100g"],"Strawberries":[32,0.7,7.7,0.3,"100g"],
+"Raspberries":[52,1.2,12,0.7,"100g"],"Blackberries":[43,1.4,10,0.5,"100g"],
+"Orange (medium)":[62,1.2,15,0.2,"1 orange (131g)"],"Clementine":[47,0.9,12,0.1,"1 fruit (74g)"],
+"Grapefruit, half":[52,0.9,13,0.2,"half (123g)"],
+"Grapes":[69,0.7,18,0.2,"100g"],"Avocado":[160,2,9,15,"100g"],"Avocado, half":[120,1.5,6.5,11,"half (68g)"],
+"Mango":[60,0.8,15,0.4,"100g"],"Watermelon":[30,0.6,7.6,0.2,"100g"],
+"Cantaloupe":[34,0.8,8.2,0.2,"100g"],"Pineapple":[50,0.5,13,0.1,"100g"],
+"Peach":[39,0.9,10,0.3,"100g"],"Pear":[57,0.4,15,0.1,"100g"],
+"Kiwi":[61,1.1,15,0.5,"100g"],"Cherries":[63,1.1,16,0.2,"100g"],
+"Plum":[46,0.7,11,0.3,"100g"],"Pomegranate seeds":[83,1.7,19,1.2,"100g"],
+"Dates":[282,2.5,75,0.4,"100g"],"Figs, fresh":[74,0.8,19,0.3,"100g"],
+"Broccoli, cooked":[35,2.4,7,0.4,"100g"],"Broccoli, raw":[34,2.8,7,0.4,"100g"],
+"Spinach, raw":[23,2.9,3.6,0.4,"100g"],"Spinach, cooked":[41,5.4,6.8,0.5,"100g"],
+"Kale, raw":[35,2.9,4.4,1.5,"100g"],"Kale, cooked":[28,1.9,5.6,0.4,"100g"],
+"Mixed Greens / Salad":[20,1.8,3.5,0.3,"100g"],"Romaine Lettuce":[17,1.2,3.3,0.3,"100g"],
+"Arugula":[25,2.6,3.7,0.7,"100g"],"Bok Choy, cooked":[13,1.8,2.2,0.2,"100g"],
+"Tomato":[18,0.9,3.9,0.2,"100g"],"Cherry Tomatoes":[18,0.9,3.9,0.2,"100g"],
+"Cucumber":[16,0.7,3.6,0.1,"100g"],"Bell Pepper, red":[31,1,6,0.3,"100g"],
+"Bell Pepper, green":[20,0.9,4.6,0.2,"100g"],"Carrot, raw":[41,0.9,10,0.2,"100g"],
+"Celery":[16,0.7,3,0.2,"100g"],"Asparagus, cooked":[22,2.4,4.1,0.2,"100g"],
+"Green Beans, cooked":[31,1.8,7,0.2,"100g"],"Cauliflower, cooked":[23,1.8,4.1,0.5,"100g"],
+"Zucchini, cooked":[17,1.1,3.5,0.2,"100g"],"Mushrooms, cooked":[28,2.2,5.9,0.4,"100g"],
+"Onion, raw":[40,1.1,9,0.1,"100g"],"Garlic":[149,6.4,33,0.5,"100g"],
+"Brussels Sprouts, cooked":[36,3,7.1,0.5,"100g"],"Cabbage, cooked":[23,1.3,5.4,0.1,"100g"],
+"Eggplant, cooked":[35,0.8,8.7,0.2,"100g"],"Beet, cooked":[44,1.7,10,0.2,"100g"],
+"Butternut Squash, cooked":[45,1,11,0.1,"100g"],"Peas, cooked":[84,5.4,15,0.2,"100g"],
+"Whole Milk":[149,8,12,8,"1 cup (244ml)"],"2% Milk":[122,8,11,4.8,"1 cup (244ml)"],
+"Skim Milk":[83,8,12,0.2,"1 cup (244ml)"],"Almond Milk, unsweetened":[37,1.4,1.4,2.5,"1 cup (240ml)"],
+"Oat Milk":[120,3,16,5,"1 cup (240ml)"],"Soy Milk, unsweetened":[80,7,4,4,"1 cup (240ml)"],
+"Butter":[102,0.1,0,11.5,"1 tbsp (14g)"],"Ghee":[112,0,0,12.7,"1 tbsp (13g)"],
+"Heavy Cream":[51,0.4,0.4,5.5,"1 tbsp (15ml)"],"Sour Cream, full fat":[61,0.9,1.3,6,"2 tbsp (28g)"],
+"Almonds":[164,6,6,14,"1 oz (28g)"],"Almonds, roasted":[170,6,5.8,15,"1 oz (28g)"],
+"Walnuts":[185,4.3,3.9,18,"1 oz (28g)"],"Cashews":[157,5,9,12,"1 oz (28g)"],
+"Cashews, roasted":[163,4.4,9.2,13,"1 oz (28g)"],"Peanuts, dry roasted":[166,7,6,14,"1 oz (28g)"],
+"Pistachios":[159,5.7,7.7,13,"1 oz (28g)"],"Pistachios, roasted":[162,6,8,13,"1 oz (28g)"],
+"Pistachios, salted":[162,6,8,13,"1 oz (28g)"],"Macadamia Nuts":[204,2.2,3.9,21,"1 oz (28g)"],
+"Brazil Nuts":[186,4.1,3.5,19,"1 oz (28g)"],"Pecans":[196,2.6,4,20,"1 oz (28g)"],
+"Hazelnuts":[178,4.2,4.7,17,"1 oz (28g)"],"Pine Nuts":[191,3.9,3.7,19,"1 oz (28g)"],
+"Mixed Nuts":[172,5,7.9,15,"1 oz (28g)"],
+"Peanut Butter":[94,4,3.1,8,"1 tbsp (16g)"],"Peanut Butter, natural":[95,4.3,3.6,8,"1 tbsp (16g)"],
+"Almond Butter":[98,3.4,3,9,"1 tbsp (16g)"],"Cashew Butter":[94,2.8,4.4,7.9,"1 tbsp (16g)"],
+"Sunflower Seed Butter":[99,3.1,3.7,8.8,"1 tbsp (16g)"],
+"Chia Seeds":[138,4.7,12,8.7,"1 oz (28g)"],"Flaxseeds, ground":[75,2.6,4,5.9,"1 tbsp (10g)"],
+"Hemp Seeds":[166,9.5,2.6,13,"1 oz (28g)"],"Pumpkin Seeds":[151,9,5,13,"1 oz (28g)"],
+"Sunflower Seeds":[165,5.5,7,14,"1 oz (28g)"],"Sesame Seeds":[160,5,7,14,"1 oz (28g)"],
+"Olive Oil":[119,0,0,13.5,"1 tbsp (13.5g)"],"Coconut Oil":[121,0,0,13.5,"1 tbsp (13.5g)"],
+"Avocado Oil":[124,0,0,14,"1 tbsp (14g)"],
+"Hummus":[166,7.9,14,9.6,"100g"],"Tahini":[595,17,21,54,"100g"],
+"Salsa":[36,1.8,7.2,0.3,"100g"],"Guacamole":[150,2,8,14,"100g"],
+"Ranch Dressing":[145,0.8,1.6,15,"2 tbsp (30g)"],"Caesar Dressing":[163,1.2,0.6,17,"2 tbsp (30g)"],
+"Soy Sauce":[9,1.3,0.8,0.1,"1 tbsp (18ml)"],"Hot Sauce (avg)":[1,0,0,0,"1 tsp"],
+"BBQ Sauce":[47,0.3,11,0.1,"2 tbsp (36g)"],"Ketchup":[19,0.4,4.6,0.1,"1 tbsp (17g)"],
+"Mayonnaise":[94,0.1,0.1,10,"1 tbsp (14g)"],"Mayo, light":[49,0.1,1,5,"1 tbsp (15g)"],
+"Pesto":[263,6,3.7,24,"2 tbsp (30g)"],"Marinara Sauce":[37,1.5,7,0.6,"100g"],
+"Granola":[471,10,64,20,"100g"],"Granola Bar (avg)":[193,4,29,7.6,"1 bar (47g)"],
+"Rice Cake, plain":[35,0.7,7.3,0.3,"1 cake (9g)"],"Rice Cakes, plain":[387,8,81,3,"100g"],
+"Popcorn, air-popped":[31,1,6.2,0.4,"1 cup (8g)"],"Popcorn, butter":[64,1,8,3,"1 cup (11g)"],
+"Pretzels":[380,9,80,3.8,"100g"],"Tortilla Chips":[489,7.3,64,23,"100g"],
+"Potato Chips":[536,7,53,35,"100g"],"Crackers, whole wheat":[431,11,64,16,"100g"],
+"Dark Chocolate (70%+)":[170,2.2,13,12,"1 oz (28g)"],"Dark Chocolate (85%+)":[152,3,10,13,"1 oz (28g)"],
+"Milk Chocolate":[545,8,60,30,"100g"],"Beef Jerky":[410,33,11,26,"100g"],
+"Trail Mix":[462,11,49,26,"100g"],
+"Oatmeal with banana, plain":[220,7,44,3.5,"1 bowl"],
+"Grilled Chicken Salad":[280,35,12,10,"1 large bowl"],
+"Chicken & Rice Bowl":[480,42,48,9,"1 bowl"],
+"Salmon with vegetables":[350,34,18,16,"1 plate"],
+"Stir Fry with chicken":[350,30,28,10,"1 plate"],
+"Beef & Broccoli Stir Fry":[310,26,22,13,"1 plate"],
+"Pasta with marinara":[350,12,65,5,"1 plate (300g)"],"Pasta with meat sauce":[440,22,58,12,"1 plate (300g)"],
+"Chicken Burrito Bowl":[520,35,58,14,"1 bowl"],"Burrito Bowl":[520,32,60,12,"1 bowl"],
+"Turkey Wrap":[380,28,42,10,"1 wrap"],"BLT Sandwich":[360,17,36,16,"1 sandwich"],
+"Grilled Cheese Sandwich":[440,17,40,24,"1 sandwich"],"Tuna Salad Sandwich":[320,23,35,8,"1 sandwich"],
+"Turkey & Cheese Sub":[430,25,46,14,"6-inch sub"],
+"Greek Salad":[200,6,12,15,"1 bowl"],"Caesar Salad with chicken":[380,32,14,22,"1 bowl"],
+"Avocado Toast":[290,9,34,14,"2 slices toast"],"Avocado Toast with egg":[380,15,34,20,"2 slices + 1 egg"],
+"Protein Smoothie (basic)":[320,28,38,5,"1 shake"],"Green Smoothie":[180,8,30,3,"1 glass (400ml)"],
+"Acai Bowl":[350,5,56,10,"1 bowl"],"Poke Bowl":[480,30,52,14,"1 bowl"],
+"Sushi Roll (avg)":[350,12,56,8,"8 pieces"],
+"Soup, chicken noodle":[62,3.5,7.5,1.4,"1 cup (240ml)"],
+"Soup, lentil":[130,9,20,1,"1 cup (240ml)"],"Chili, beef":[220,16,18,8,"1 cup (240ml)"],
+"Tacos, chicken (2)":[380,28,36,10,"2 tacos"],"Burger with bun":[490,29,36,25,"1 burger"],
+"Grilled Salmon Fillet":[280,37,0,14,"1 fillet (140g)"],
+"Grilled Chicken Breast":[165,31,0,3.6,"1 breast (100g)"],
+"Pancakes (plain)":[227,6,29,9,"2 medium"],"Waffles (plain)":[310,9,42,12,"2 waffles"],
+"French Toast":[229,7,27,9,"2 slices"],
+"Coffee, black":[2,0.3,0,0,"1 cup (240ml)"],"Coffee, with cream":[52,0.5,0.4,5.5,"1 cup"],
+"Latte, 2% milk (12oz)":[150,8,15,6,"12 oz"],"Latte, oat milk (12oz)":[190,4,28,6,"12 oz"],
+"Cappuccino":[80,4,8,3.5,"8 oz"],"Cold Brew Coffee":[5,0.3,0,0,"12 oz"],
+"Matcha Latte":[120,4,16,4,"12 oz"],"Green Tea, unsweetened":[2,0,0,0,"1 cup (240ml)"],
+"Orange Juice":[112,1.7,26,0.5,"1 cup (248ml)"],"Protein Shake (avg)":[150,25,8,3,"1 scoop (~35g)"],
+"Coconut Water":[46,1.7,9,0.5,"1 cup (240ml)"],"Sports Drink (Gatorade)":[80,0,21,0,"12 oz (355ml)"],
+"Beer, regular":[153,1.6,13,0,"12 oz (355ml)"],"Wine, red":[125,0.1,3.8,0,"5 oz (148ml)"],
+"Wine, white":[121,0.1,3.8,0,"5 oz (148ml)"],
+};
+
+const FOOD_CATEGORIES = {
+  "🍗 Chicken & Turkey":["Chicken Breast, grilled","Chicken Thigh, grilled","Ground Turkey, cooked","Turkey Breast, roasted","Rotisserie Chicken, breast","Grilled Chicken Breast","Chicken & Rice Bowl","Grilled Chicken Salad"],
+  "🐟 Fish & Seafood":["Salmon, wild Atlantic","Tuna, canned in water","Shrimp, cooked","Tilapia, cooked","Cod, baked","Sardines, canned in oil","Grilled Salmon Fillet","Tuna Steak, cooked"],
+  "🥩 Beef & Pork":["Ground Beef 90/10, cooked","Steak, sirloin cooked","Ground Beef Burger patty","Pork Tenderloin, cooked","Pork Chop, cooked","Bacon, cooked","Ham, deli sliced"],
+  "🥚 Eggs & Dairy":["Egg, large whole","Scrambled Eggs (2 large)","Hard Boiled Egg","Greek Yogurt, plain nonfat","Cottage Cheese, low-fat","Cheddar Cheese","Whole Milk","2% Milk","Mozzarella, part-skim"],
+  "🌱 Plant Protein":["Tofu, firm","Tempeh","Edamame, shelled","Lentils, cooked","Black Beans, cooked","Chickpeas, cooked","Soybeans, cooked","Protein Bar (avg)","Whey Protein Powder"],
+  "🌾 Grains & Bread":["White Rice, cooked","Brown Rice, cooked","Oatmeal, cooked","Quinoa, cooked","Whole Wheat Bread","Sweet Potato, baked","Pasta, cooked","Oats, dry rolled","Cauliflower Rice, cooked"],
+  "🥦 Vegetables":["Broccoli, cooked","Spinach, raw","Kale, raw","Mixed Greens / Salad","Bell Pepper, red","Carrot, raw","Asparagus, cooked","Cauliflower, cooked","Mushrooms, cooked","Tomato","Zucchini, cooked"],
+  "🍎 Fruits":["Apple (medium)","Banana (medium)","Blueberries","Strawberries","Avocado","Orange (medium)","Raspberries","Mango","Watermelon","Cherries","Kiwi"],
+  "🥜 Nuts & Seeds":["Almonds","Walnuts","Pistachios","Pistachios, roasted","Cashews","Peanuts, dry roasted","Macadamia Nuts","Pecans","Mixed Nuts","Peanut Butter","Almond Butter","Chia Seeds","Hemp Seeds","Pumpkin Seeds","Sunflower Seeds"],
+  "🍱 Full Meals":["Chicken & Rice Bowl","Burrito Bowl","Salmon with vegetables","Grilled Chicken Salad","Stir Fry with chicken","Overnight Oats","Turkey Wrap","Avocado Toast","Poke Bowl","Caesar Salad with chicken","Pasta with marinara"],
+  "☕ Drinks":["Coffee, black","Latte, 2% milk (12oz)","Protein Shake (avg)","Green Tea, unsweetened","Orange Juice","Coconut Water","Sports Drink (Gatorade)","Cold Brew Coffee"],
+  "🍫 Snacks":["Protein Bar (avg)","Greek Yogurt, plain nonfat","Almonds","Pistachios","Rice Cake, plain","Hummus","Dark Chocolate (70%+)","Popcorn, air-popped","String Cheese","Beef Jerky","Trail Mix"],
+};
+
+
+// ── NUTRITION TAB ─────────────────────────────────────────────────────────────
+let selectedFood = null;
+
+function rNutr(){
+  $("m-date").value = toDay();
+  const cal=tdee(P), pt=Math.round(P.weightLbs*.82), ct=Math.round((cal*.4)/4), ft=Math.round((cal*.3)/9);
+  const today=toDay(), tm=NL.filter(m=>m.date===today);
+  const tC=tm.reduce((a,m)=>a+(+m.cal||0),0), tP=tm.reduce((a,m)=>a+(+m.prot||0),0),
+        tCb=tm.reduce((a,m)=>a+(+m.carb||0),0), tF=tm.reduce((a,m)=>a+(+m.fat||0),0);
+  $("nutr-stats").innerHTML=`
+    <div class="stat-card"><div class="stat-label">Calories</div><div class="stat-value" style="color:var(--navy)">${tC}<span class="stat-unit">/ ${cal}</span></div></div>
+    <div class="stat-card"><div class="stat-label">Protein</div><div class="stat-value" style="color:var(--green)">${tP}g<span class="stat-unit">/ ${pt}g</span></div></div>
+    <div class="stat-card"><div class="stat-label">TDEE</div><div class="stat-value" style="color:var(--blue)">${cal}<span class="stat-unit">kcal</span></div></div>
+    <div class="stat-card"><div class="stat-label">Meals</div><div class="stat-value" style="color:var(--orange)">${tm.length}</div></div>`;
+  function mb(lbl,cur,tgt,col){const p=Math.min(100,Math.round((cur/tgt)*100)),f=p>=90?"var(--green)":col;return`<div class="macro-wrap"><div class="macro-labels"><span>${lbl}</span><span>${cur}g / ${tgt}g (${p}%)</span></div><div class="macro-track"><div class="macro-fill" style="width:${p}%;background:${f}"></div></div></div>`}
+  $("macro-bars").innerHTML = mb("Protein",tP,pt,"var(--green)")+mb("Carbs",tCb,ct,"var(--blue)")+mb("Fat",tF,ft,"var(--orange)");
+  renderTodayMeals(tm);
+}
+
+function renderTodayMeals(tm){
+  if(!tm||!tm.length){$("today-meals").innerHTML="";return}
+  $("today-meals").innerHTML=`<div style="border-top:1.5px solid var(--border);padding-top:14px;margin-top:4px">
+    <div class="slbl" style="margin-bottom:10px">Today's Log</div>`+
+    tm.map(m=>`<div class="log-row">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div>
+        <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px">${m.cal} kcal · P:${m.prot}g · C:${m.carb}g · F:${m.fat}g</div>
+      </div>
+      <button onclick="delMeal(${m.id})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;padding:0 0 0 12px;flex-shrink:0">×</button>
+    </div>`).join("")+`</div>`;
+}
+
+function delMeal(id){NL=NL.filter(m=>m.id!==id);ss("nutriLog",NL);rNutr();toast("Meal removed")}
+
+// ── FOOD SEARCH — Open Food Facts (3M+ foods) + USDA fallback ────────────────
+// Safari-compatible fetch with timeout — no AbortSignal (breaks on iOS Safari)
+function fetchWithTimeout(url, ms, opts){
+  const fetchPromise = fetch(url, opts||{});
+  const timeoutPromise = new Promise((_,reject)=>
+    setTimeout(()=>reject(new Error("timeout")), ms)
+  );
+  return Promise.race([fetchPromise, timeoutPromise]);
+}
+let searchTimer = null;
+let lastSearchResults = [];
+let lastUsdaResults = [];
+
+function onFoodSearch(){
+  const q = $("food-search").value.trim();
+  if(!q){ showFoodCategories(); return; }
+  clearTimeout(searchTimer);
+  // Show instant local results immediately
+  const local = Object.keys(FDB).filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,4);
+  if(local.length) showFoodResults(local, q, true);
+  else showSearchingState(q);
+  // Fire API search after debounce
+  searchTimer = setTimeout(()=>searchAllSources(q), 400);
+}
+
+function showSearchingState(q){
+  $("food-results").style.display="block";
+  $("food-results").innerHTML=`<div style="padding:14px 16px;font-size:13px;color:var(--text-muted)">
+    <span style="display:inline-block;animation:pu 1.5s infinite">🔍</span> Searching for "<b>${q}</b>"…
+  </div>`;
+}
+
+
+async function searchAllSources(q){
+  // Run both APIs in parallel — show whichever returns results first
+  const [offResult, usdaResult] = await Promise.allSettled([
+    searchOpenFoodFacts(q),
+    searchUSDA(q)
+  ]);
+  const off  = offResult.status==="fulfilled"  ? offResult.value  : null;
+  const usda = usdaResult.status==="fulfilled" ? usdaResult.value : null;
+  if(off && off.length){
+    lastSearchResults = off;
+    showOFFResults(off, q);
+    return;
+  }
+  if(usda && usda.length){
+    lastUsdaResults = usda;
+    showUSDAResults(usda, q);
+    return;
+  }
+  const local = Object.keys(FDB).filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(local.length) showFoodResults(local, q, false);
+  else showNoResults(q);
+}
+
+async function searchOpenFoodFacts(q){
+  const base = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=15&fields=product_name,brands,serving_size,nutriments,code&sort_by=unique_scans_n`;
+  // Try direct, then CORS proxies for iOS Safari
+  const urls = [
+    base,
+    "https://corsproxy.io/?"+encodeURIComponent(base),
+    "https://api.allorigins.win/raw?url="+encodeURIComponent(base),
+  ];
+  for(const url of urls){
+    try {
+      const r = await fetchWithTimeout(url, 6000);
+      if(!r.ok) continue;
+      const text = await r.text();
+      if(!text || !text.trim().startsWith("{")) continue;
+      const d = JSON.parse(text);
+      const products = (d.products||[]).filter(p=>{
+        if(!p.product_name||!p.nutriments) return false;
+        const n=p.nutriments;
+        return n["energy-kcal_serving"]||n["energy-kcal_100g"]||n["energy-kcal"]||n["energy_value"];
+      });
+      if(products.length) return products;
+    } catch(e){ continue; }
+  }
+  return null;
+}
+
+async function searchUSDA(q){
+  try {
+    const url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${USDA_KEY}&query=${encodeURIComponent(q)}&pageSize=12&dataType=Branded,Foundation,SR%20Legacy`;
+    const r = await fetchWithTimeout(url, 6000);
+    if(!r.ok) return null;
+    const d = await r.json();
+    return (d.foods||[]).filter(f=>f.description)||null;
+  } catch { return null; }
+}
+
+
+function getOFFMacros(p){
+  const n = p.nutriments||{};
+  // OFF stores values per serving AND per 100g — prefer per serving, fall back to 100g
+  const cal  = Math.round(n["energy-kcal_serving"] || n["energy-kcal_100g"]   || n["energy-kcal"]   || Math.round((n["energy_serving"]||n["energy_100g"]||0)/4.184) || 0);
+  const prot = Math.round((n["proteins_serving"]    || n["proteins_100g"]      || n["proteins"]      || 0)*10)/10;
+  const carb = Math.round((n["carbohydrates_serving"]||n["carbohydrates_100g"] ||n["carbohydrates"]  || 0)*10)/10;
+  const fat  = Math.round((n["fat_serving"]          || n["fat_100g"]          || n["fat"]           || 0)*10)/10;
+  const fiber= Math.round((n["fiber_serving"]        || n["fiber_100g"]        || n["fiber"]         || 0)*10)/10;
+  const sugar= Math.round((n["sugars_serving"]       || n["sugars_100g"]       || n["sugars"]        || 0)*10)/10;
+  // Serving size: prefer product serving_size field, fall back to nutriment serving
+  const serving = p.serving_size
+    ? String(p.serving_size).replace(/\s+/g," ").trim()
+    : (n.serving_size ? String(n.serving_size) : "100g");
+  return {cal,prot,carb,fat,fiber,sugar,serving};
+}
+
+function showOFFResults(products, q){
+  const div = $("food-results");
+  div.style.display="block";
+  const local = Object.keys(FDB).filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,3);
+  let html = "";
+  if(local.length){
+    html += `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Common Foods</div>`;
+    html += local.map(k=>foodResultHTML(k)).join("");
+    html += `<div style="height:1px;background:var(--border)"></div>`;
+  }
+  html += `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Products — 3M+ foods</div>`;
+  html += products.map((p,i)=>{
+    const {cal,prot,carb,fat,fiber,serving} = getOFFMacros(p);
+    const brand = p.brands ? p.brands.split(",")[0].trim() : "";
+    const name = p.product_name;
+    const fiberStr = fiber > 0 ? ` · Fiber:${fiber}g` : "";
+    return `<div class="food-result-item" onclick="selectOFFFood(${i})">
+      <div style="flex:1;min-width:0">
+        <div class="food-result-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
+        <div class="food-result-macros">${brand?`<span style="color:var(--blue);font-weight:600">${brand}</span> · `:""}P:${prot}g · C:${carb}g · F:${fat}g${fiberStr} · ${serving}</div>
+      </div>
+      <div style="text-align:right;margin-left:10px;flex-shrink:0">
+        <div class="food-result-cal">${cal||"?"}</div>
+        <div class="food-result-cal-unit">kcal</div>
+      </div>
+    </div>`;
+  }).join("");
+  html += `<div class="food-result-item" onclick="showManual()" style="background:var(--dark);border-top:1.5px solid var(--border)">
+    <span style="font-size:13px;color:var(--text-muted)">✏️ Enter macros manually</span>
+  </div>`;
+  div.innerHTML = html;
+}
+
+function selectOFFFood(idx){
+  const p = lastSearchResults[idx];
+  if(!p) return;
+  const {cal,prot,carb,fat,fiber,sugar,serving} = getOFFMacros(p);
+  const brand = p.brands ? " ("+p.brands.split(",")[0].trim()+")" : "";
+  selectedFood = {name: p.product_name+brand, calPer:cal, protPer:prot, carbPer:carb, fatPer:fat, serving};
+  saveRecentFood(p.product_name+brand, cal, prot, carb, fat, serving);
+  showFoodConfirm();
+}
+
+function getUsdaNutrient(nutrients, numbers){
+  for(const n of numbers){
+    const found = nutrients.find(x=>x.nutrientNumber==n||x.nutrientId==n);
+    if(found && found.value) return found.value;
+  }
+  return 0;
+}
+
+function showUSDAResults(foods, q){
+  const div = $("food-results");
+  div.style.display="block";
+  const local = Object.keys(FDB).filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,3);
+  let html = "";
+  if(local.length){
+    html += `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Common Foods</div>`;
+    html += local.map(k=>foodResultHTML(k)).join("");
+    html += `<div style="height:1px;background:var(--border)"></div>`;
+  }
+  html += `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">USDA Database</div>`;
+  html += foods.map((f,i)=>{
+    const n = f.foodNutrients||[];
+    const cal  = Math.round(getUsdaNutrient(n,[1008,208]));
+    const prot = Math.round(getUsdaNutrient(n,[1003,203])*10)/10;
+    const carb = Math.round(getUsdaNutrient(n,[1005,205])*10)/10;
+    const fat  = Math.round(getUsdaNutrient(n,[1004,204])*10)/10;
+    const serving = f.servingSize ? `${f.servingSize}${f.servingSizeUnit||"g"}` : "100g";
+    const brand = f.brandOwner||f.brandName||"";
+    return `<div class="food-result-item" onclick="selectUsdaFood(${i})">
+      <div style="flex:1;min-width:0">
+        <div class="food-result-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.description}</div>
+        <div class="food-result-macros">${brand?`<span style="color:var(--blue)">${brand}</span> · `:""}P:${prot}g · C:${carb}g · F:${fat}g · ${serving}</div>
+      </div>
+      <div style="text-align:right;margin-left:10px;flex-shrink:0">
+        <div class="food-result-cal">${cal||"?"}</div>
+        <div class="food-result-cal-unit">kcal</div>
+      </div>
+    </div>`;
+  }).join("");
+  html += `<div class="food-result-item" onclick="showManual()" style="background:var(--dark);border-top:1.5px solid var(--border)">
+    <span style="font-size:13px;color:var(--text-muted)">✏️ Enter macros manually</span>
+  </div>`;
+  div.innerHTML = html;
+}
+
+function selectUsdaFood(idx){
+  const f = lastUsdaResults[idx];
+  if(!f) return;
+  const n = f.foodNutrients||[];
+  const cal  = Math.round(getUsdaNutrient(n,[1008,208]));
+  const prot = Math.round(getUsdaNutrient(n,[1003,203])*10)/10;
+  const carb = Math.round(getUsdaNutrient(n,[1005,205])*10)/10;
+  const fat  = Math.round(getUsdaNutrient(n,[1004,204])*10)/10;
+  const serving = f.servingSize ? `${f.servingSize}${f.servingSizeUnit||"g"}` : "100g";
+  selectedFood = {name: f.description, calPer:cal, protPer:prot, carbPer:carb, fatPer:fat, serving};
+  saveRecentFood(f.description, cal, prot, carb, fat, serving);
+  showFoodConfirm();
+}
+
+function saveRecentFood(name, cal, prot, carb, fat, serving){
+  let recent = sg("recentFoods",[])||[];
+  recent = [name,...recent.filter(k=>k!==name)].slice(0,15);
+  ss("recentFoods", recent);
+  const rd = sg("recentFoodsData",{})||{};
+  rd[name] = [cal,prot,carb,fat,serving];
+  ss("recentFoodsData", rd);
+}
+
+function showFoodResults(matches, q, isPartial){
+  const div = $("food-results");
+  div.style.display="block";
+  let html = isPartial
+    ? `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Quick Results — searching database…</div>`
+    : `<div style="padding:6px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Results</div>`;
+  html += matches.map(k=>foodResultHTML(k)).join("");
+  html += `<div class="food-result-item" onclick="showManual()" style="background:var(--dark)"><span style="font-size:13px;color:var(--text-muted)">✏️ Enter macros manually</span></div>`;
+  div.innerHTML = html;
+}
+
+function foodResultHTML(key){
+  const [cal,prot,carb,fat,serving]=FDB[key];
+  return `<div class="food-result-item" onclick="selectFood('${key.replace(/'/g,"\\'")}')">
+    <div style="flex:1;min-width:0">
+      <div class="food-result-name">${key}</div>
+      <div class="food-result-macros">P:${prot}g · C:${carb}g · F:${fat}g · ${serving}</div>
+    </div>
+    <div style="text-align:right;margin-left:12px;flex-shrink:0">
+      <div class="food-result-cal">${cal}</div>
+      <div class="food-result-cal-unit">kcal</div>
+    </div>
+  </div>`;
+}
+
+function showNoResults(q){
+  $("food-results").style.display="block";
+  $("food-results").innerHTML=`<div class="food-result-item" style="flex-direction:column;align-items:flex-start;gap:10px">
+    <div style="font-size:13px;color:var(--text-muted)">No results for "<b>${q}</b>"</div>
+    <div style="font-size:12px;color:var(--text-muted)">Try a shorter search term, the brand name, or enter macros manually.</div>
+    <button class="btn-ghost btn-sm" onclick="showManual()">✏️ Enter macros manually</button>
+  </div>`;
+}
+
+function showFoodCategories(){
+  const recentKeys = (sg("recentFoods",[])||[]).slice(0,8);
+  const recentData = sg("recentFoodsData",{})||{};
+  let html = "";
+  if(recentKeys.length){
+    html += `<div style="padding:8px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">Recently Logged</div>`;
+    html += recentKeys.map(k=>{
+      if(FDB[k]) return foodResultHTML(k);
+      if(recentData[k]){
+        const [cal,prot,carb,fat,serving]=recentData[k];
+        return `<div class="food-result-item" onclick="selectFood_recent('${k.replace(/'/g,"\\'")}')">
+          <div style="flex:1;min-width:0"><div class="food-result-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${k}</div>
+          <div class="food-result-macros">P:${prot}g · C:${carb}g · F:${fat}g</div></div>
+          <div style="text-align:right;margin-left:12px;flex-shrink:0"><div class="food-result-cal">${cal}</div><div class="food-result-cal-unit">kcal</div></div>
+        </div>`;
+      }
+      return "";
+    }).filter(Boolean).join("");
+    html += `<div style="height:1px;background:var(--border)"></div>`;
+  }
+  Object.entries(FOOD_CATEGORIES).forEach(([cat,items])=>{
+    html += `<div style="padding:8px 14px 4px;font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--dark)">${cat}</div>`;
+    html += items.slice(0,5).map(k=>FDB[k]?foodResultHTML(k):"").filter(Boolean).join("");
+  });
+  html += `<div class="food-result-item" onclick="showManual()" style="background:var(--dark);border-top:1.5px solid var(--border)"><span style="font-size:13px;color:var(--text-muted)">✏️ Enter macros manually</span></div>`;
+  $("food-results").style.display="block";
+  $("food-results").innerHTML = html;
+}
+
+function selectFood_recent(key){
+  const rd = sg("recentFoodsData",{})||{};
+  if(rd[key]){
+    const [cal,prot,carb,fat,serving]=rd[key];
+    selectedFood={name:key,calPer:cal,protPer:prot,carbPer:carb,fatPer:fat,serving};
+    showFoodConfirm();
+  }
+}
+
+function selectFood(key){
+  const [cal,prot,carb,fat,serving]=FDB[key];
+  selectedFood={name:key, calPer:cal, protPer:prot, carbPer:carb, fatPer:fat, serving};
+  saveRecentFood(key,cal,prot,carb,fat,serving);
+  showFoodConfirm();
+}
+
+function showFoodConfirm(){
+  $("food-results").style.display="none";
+  $("food-search").value = selectedFood.name;
+  $("confirm-name").textContent = selectedFood.name;
+  $("confirm-serving-desc").textContent = "Per "+selectedFood.serving;
+  $("m-serving").value = "1";
+  $("meal-step-confirm").style.display = "block";
+  updateServing();
+}
+
+
+
+function updateServing(){
+  if(!selectedFood)return;
+  const s=parseFloat($("m-serving").value)||1;
+  $("prev-cal").textContent=Math.round(selectedFood.calPer*s);
+  $("prev-prot").textContent=(selectedFood.protPer*s).toFixed(1)+"g";
+  $("prev-carb").textContent=(selectedFood.carbPer*s).toFixed(1)+"g";
+  $("prev-fat").textContent=(selectedFood.fatPer*s).toFixed(1)+"g";
+}
+
+function confirmMeal(){
+  if(!selectedFood)return;
+  const s=parseFloat($("m-serving").value)||1;
+  const e={
+    id:Date.now(), date:$("m-date").value,
+    name: s===1 ? selectedFood.name : `${selectedFood.name} (×${s})`,
+    cal:Math.round(selectedFood.calPer*s),
+    prot:Math.round(selectedFood.protPer*s*10)/10,
+    carb:Math.round(selectedFood.carbPer*s*10)/10,
+    fat:Math.round(selectedFood.fatPer*s*10)/10,
+  };
+  NL=[e,...NL];ss("nutriLog",NL);
+  resetMealForm();rNutr();toast("✓ "+selectedFood.name+" logged");
+}
+
+function showManual(){
+  $("food-results").style.display="none";
+  $("meal-step-manual").style.display="block";
+  $("meal-step-confirm").style.display="none";
+  $("m-name").value=$("food-search").value;
+}
+
+function resetMealForm(){
+  selectedFood=null;
+  $("food-search").value="";
+  $("food-results").style.display="none";
+  $("meal-step-confirm").style.display="none";
+  setFoodMode("search");
+}
+
+function saveMealManual(){
+  if(!$("m-name").value.trim())return;
+  const e={id:Date.now(),date:$("m-date").value,name:$("m-name").value.trim(),cal:+$("m-cal").value||0,prot:+$("m-prot").value||0,carb:+$("m-carb").value||0,fat:+$("m-fat").value||0};
+  NL=[e,...NL];ss("nutriLog",NL);
+  $("m-name").value="";$("m-cal").value="";$("m-prot").value="";$("m-carb").value="";$("m-fat").value="";
+  resetMealForm();rNutr();toast("✓ Meal logged");
+}
+
+function analyzeNutrition(){
+  const cal=tdee(P),pt=Math.round(P.weightLbs*.82),ct=Math.round((cal*.4)/4),ft=Math.round((cal*.3)/9);
+  const today=toDay(),tm=NL.filter(m=>m.date===today);
+  const tC=tm.reduce((a,m)=>a+(+m.cal||0),0),tP=tm.reduce((a,m)=>a+(+m.prot||0),0);
+  let o="Daily Intake Analysis:\n\n";
+  const cp=Math.round((tC/cal)*100);
+  o+=`Calories: ${tC}/${cal} kcal (${cp}%). `;
+  if(cp<70)o+="Significantly under target. >500 kcal deficit risks lean mass loss (Phillips & Van Loon, 2011).\n\n";
+  else if(cp>110)o+="Over target. This surplus will slow fat loss.\n\n";
+  else o+="Good range for recomposition.\n\n";
+  const pp=Math.round((tP/pt)*100);
+  o+=`Protein: ${tP}g/${pt}g (${pp}%). `;
+  if(pp<80)o+="Below target. Morton et al. (2018, BJSM): 1.6-2.2 g/kg for muscle preservation. Prioritize at every meal.\n\n";
+  else o+="Good. Distribute across 3-4 meals — Areta et al. (2013): 4×20g outperforms 2×40g for MPS.\n\n";
+  if(P.conditions.includes("prediabetes"))o+="Glycemic: Eat vegetables and protein before carbs (Shukla 2015: −29% postprandial glucose). Walk 10-15 min after meals.\n\n";
+  if(P.conditions.includes("hyperlipidemia"))o+="Lipids: 2-3 servings fatty fish/week (REDUCE-IT), 5-10g soluble fiber/day (NCEP: 3-5% LDL reduction), sat fat <7% calories (AHA/ACC 2019).";
+  $("nutr-insight").textContent=o.trim();
+}
+
+// ── SCANNER ───────────────────────────────────────────────────────────────────
+function openScanner(){
+  $("scanner-overlay").classList.add("open");
+  $("scan-permission-ask").style.display="block";
+  $("scan-camera-active").style.display="none";
+  $("scan-manual").value="";
+}
+
+async function startCamera(){
+  $("scan-permission-ask").style.display="none";
+  $("scan-camera-active").style.display="block";
+  $("scan-status").textContent="Starting camera…";
+
+  if(!navigator||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    $("scan-status").textContent="Camera not available. Type barcode below.";
+    return;
+  }
+
+  let stream = null;
+
+  // Try constraints from most specific to least — iOS Safari can reject strict constraints
+  const constraintOptions = [
+    {video:{facingMode:{exact:"environment"}}},
+    {video:{facingMode:"environment"}},
+    {video:true}
+  ];
+
+  for(const constraints of constraintOptions){
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      break;
+    } catch(e){
+      if(e.name==="NotAllowedError"||e.name==="PermissionDeniedError"){
+        // Permission denied — no point trying other constraints
+        showCameraError(e);
+        return;
+      }
+      // Other error (OverconstainedError etc) — try next constraint set
+      continue;
+    }
+  }
+
+  if(!stream){
+    showCameraError({name:"NotFoundError", message:"No camera found"});
+    return;
+  }
+
+  try {
+    scanStream = stream;
+    const v = $("scan-video");
+    v.srcObject = stream;
+    v.setAttribute("playsinline","true");
+    v.setAttribute("autoplay","true");
+    v.muted = true;
+    try { await v.play(); } catch(e){ /* autoplay policy — ok */ }
+
+    if("BarcodeDetector" in window){
+      $("scan-status").textContent="Point at barcode — hold steady";
+      const detector = new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128","code_39","qr_code"]});
+      let scanning = true;
+      function scan(){
+        if(!scanning||!scanStream) return;
+        detector.detect(v).then(codes=>{
+          if(codes.length){ scanning=false; processBC(codes[0].rawValue); }
+          else requestAnimationFrame(scan);
+        }).catch(()=>requestAnimationFrame(scan));
+      }
+      // Wait for video to be ready before scanning
+      if(v.readyState >= 2){ scan(); }
+      else { v.addEventListener("loadeddata", ()=>scan(), {once:true}); }
+      setTimeout(()=>{ if(scanning) scan(); }, 800);
+    } else {
+      $("scan-status").textContent="Live scanning not available — type barcode below";
+    }
+  } catch(e){
+    showCameraError(e);
+  }
+}
+
+function showCameraError(err){
+  $("scan-camera-active").style.display="none";
+  $("scan-permission-ask").style.display="block";
+  const isDenied = err.name==="NotAllowedError"||err.name==="PermissionDeniedError";
+  $("scan-permission-ask").innerHTML=`
+    <div style="text-align:center;padding:8px 0">
+      <div style="font-size:28px;margin-bottom:8px">${isDenied?"🚫":"📷"}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px">
+        ${isDenied?"Camera Access Denied":"Camera Unavailable ("+err.name+")"}
+      </div>
+      ${isDenied?`
+      <div style="font-size:12px;color:var(--text-mid);line-height:1.8;background:var(--dark);border-radius:10px;padding:14px;margin-bottom:14px;text-align:left">
+        <b>If installed as Home Screen app:</b><br>
+        Settings → Proven Ground → Camera → Allow<br><br>
+        <b>If open in Safari:</b><br>
+        Settings → Safari → Camera → Allow<br>
+        — or tap <b>AA</b> in the address bar → Website Settings → Camera → Allow<br><br>
+        After changing, reload the page and tap Scan again.
+      </div>`:`
+      <div style="font-size:12px;color:var(--text-mid);margin-bottom:14px;line-height:1.6">
+        Camera could not start. Make sure no other app is using it, then try again.
+      </div>`}
+      <button class="btn-primary btn-sm" onclick="startCamera()" style="margin-bottom:10px;width:100%">Try Again</button>
+      <div style="font-size:12px;font-weight:600;color:var(--text-mid)">Or type barcode below ↓</div>
+    </div>`;
+}
+
+function closeScanner(){
+  $("scanner-overlay").classList.remove("open");
+  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
+  $("scan-permission-ask").style.display="block";
+  $("scan-camera-active").style.display="none";
+}
+
+function submitManual(){const v=$("scan-manual").value.trim();if(v)processBC(v)}
+async function processBC(code){
+  closeScanner();
+  $("scan-msg").textContent = "Looking up "+code+"…";
+  let found = false;
+  try {
+    const r = await fetchWithTimeout("https://world.openfoodfacts.org/api/v2/product/"+code+".json?fields=product_name,brands,serving_size,nutriments", 7000);
+    const d = await r.json();
+    if(d.status===1 && d.product){
+      const p = d.product;
+      const {cal,prot,carb,fat,serving} = getOFFMacros(p);
+      const brand = p.brands ? " ("+p.brands.split(",")[0].trim()+")" : "";
+      const name = (p.product_name||"Scanned Product")+brand;
+      selectedFood = {name, calPer:cal, protPer:prot, carbPer:carb, fatPer:fat, serving};
+      saveRecentFood(name, cal, prot, carb, fat, serving);
+      setFoodMode("search");
+      showFoodConfirm();
+      $("scan-msg").textContent = "✓ "+p.product_name;
+      found = true;
+    }
+  } catch(e){ console.log("Barcode lookup error:",e); }
+  if(!found){
+    setFoodMode("manual");
+    $("m-name").value = "Barcode "+code;
+    $("scan-msg").textContent = "Not found — enter name and macros from label";
+    setTimeout(()=>$("m-name").select(),100);
+  }
+  setTimeout(()=>$("scan-msg").textContent="", 6000);
+}
+
+function showManual(){
+  $("food-results").style.display="none";
+  setFoodMode("manual");
+  $("m-name").value=$("food-search").value;
+}
+
+function saveMealManual(){
+  if(!$("m-name").value.trim())return;
+  const dateField=$("m-date-manual")||$("m-date");
+  const e={id:Date.now(),date:dateField?dateField.value:toDay(),name:$("m-name").value.trim(),cal:+$("m-cal").value||0,prot:+$("m-prot").value||0,carb:+$("m-carb").value||0,fat:+$("m-fat").value||0};
+  NL=[e,...NL];ss("nutriLog",NL);
+  $("m-name").value="";$("m-cal").value="";$("m-prot").value="";$("m-carb").value="";$("m-fat").value="";
+  resetMealForm();rNutr();toast("✓ "+e.name+" logged");
+}
+
+// ── GOALS TAB ─────────────────────────────────────────────────────────────────
+const CONDS=["Weight loss","Prediabetes / T2DM","Hypertension","Hyperlipidemia","Heart disease","GERD","IBD / IBS","Kidney disease","Gout","PCOS","Hypothyroidism"];
+const GLIST=["Recomposition","Fat loss","Muscle gain","Longevity","Anti-inflammatory","Heart health","Blood sugar control","Athletic performance"];
+function rGoals(){$("cond-pills").innerHTML=CONDS.map(c=>`<button class="pill${selConds.map(x=>x.toLowerCase()).includes(c.toLowerCase())?" ag":""}" onclick="togCond('${c}',this)">${c}</button>`).join("");$("goal-pills").innerHTML=GLIST.map(g=>`<button class="pill${selGoal===g?" ag":""}" onclick="selG('${g}',this)">${g}</button>`).join("");updDietSub()}
+function togCond(c,btn){const i=selConds.findIndex(x=>x.toLowerCase()===c.toLowerCase());if(i>=0)selConds.splice(i,1);else selConds.push(c);btn.classList.toggle("ag");updDietSub()}
+function selG(g,btn){selGoal=g;document.querySelectorAll("#goal-pills .pill").forEach(b=>b.classList.remove("ag"));btn.classList.add("ag");updDietSub()}
+function updDietSub(){$("diet-sub").textContent=(selConds.length?selConds.join(", "):"No conditions")+" · "+selGoal}
+function genDiet(){
+  const c=selConds,g=selGoal;let o=`Diet Plan: ${c.length?c.join(", "):"General"} | ${g}\n\n`;
+  o+="MACRONUTRIENT TARGETS\n";
+  if(g==="Recomposition"||g==="Fat loss")o+="Protein: 1.6-2.2 g/kg (Morton et al., 2018). At 185 lbs: ~135-185g/day.\nCarbs: 40% calories, low-glycemic sources.\nFat: 25-30%, emphasizing unsaturated.\nCalories: TDEE minus 300-500 kcal.\n\n";
+  else if(g==="Muscle gain")o+="Protein: 1.6-2.2 g/kg. Carbs: 45-55%. Fat: 20-30%. Surplus: 200-350 kcal.\n\n";
+  else o+="Protein: 1.2-1.6 g/kg minimum. Calories matched to goal.\n\n";
+  o+="TOP FOODS TO PRIORITIZE\n1. Wild salmon / fatty fish (omega-3, REDUCE-IT trial)\n2. Legumes & lentils (fiber, low GI, Jenkins 2012)\n3. Cruciferous vegetables (fiber, anti-inflammatory)\n4. Oats & barley (beta-glucan, Whitehead 2014)\n5. Berries (polyphenols, insulin sensitivity, Stull 2010)\n6. Extra virgin olive oil (PREDIMED: 30% CVD reduction)\n\n";
+  o+="TOP FOODS TO LIMIT\n1. Sugar-sweetened beverages (Malik 2010: 26% T2DM risk per daily serving)\n2. Refined carbs & white bread (rapid glucose spikes)\n3. Processed meats (Pan 2011: 42% T2DM risk)\n4. Trans fats & fried foods (raise LDL, lower HDL)\n5. Fruit juice (same glycemic impact as soda)\n6. Packaged snacks (refined carbs + seed oils)\n7. Excess alcohol (raises TG, impairs glucose)\n8. High-sodium foods (DASH: <2300mg/day)\n\n";
+  o+="MEAL SEQUENCE (Shukla 2015): vegetables → protein → fat → carbs last. Reduces postprandial glucose 29-37%.";
+  $("diet-insight").textContent=o;
+}
+function showMotiv(){$("motiv-insight").textContent=`1. Self-Determination Theory (Deci & Ryan)\nConnect training to values you genuinely hold — longevity, mental clarity, performance. Practical tip: Write 3 personal reasons for your goal and review them weekly.\n\n2. Implementation Intentions (Gollwitzer, 1999)\nIf-then plans increase follow-through 2-3x. "If it's 6 AM on training days, I go before anything else." Removes decision fatigue. Practical tip: Set 3 specific if-then plans this week.\n\n3. Habit Stacking (Clear, 2018)\nAttach health behaviors to existing habits. "After coffee → supplements." "After sitting for lunch → log meal." Practical tip: Stack one health behavior onto your 3 most consistent daily habits.\n\n4. The Progress Principle (Amabile & Kramer, 2011)\nSmall wins are the strongest driver of intrinsic motivation. Tracking makes invisible progress visible. Practical tip: Review your body and training charts weekly. Celebrate strength gains and non-scale victories.\n\n5. Minimum Effective Dose\nOn low-motivation days, commit to 10 minutes. You'll usually continue — and if not, the habit loop is preserved. Perfectionism destroys long-term adherence. Practical tip: Keep a 10-minute workout in your back pocket.`}
+
+// ── SLEEP TAB ─────────────────────────────────────────────────────────────────
+function rSleep(){
+  $("sl-date").value=toDay();
+  const last=SL[0]||{},avg7=SL.slice(0,7).reduce((a,s)=>a+(+s.hrs||0),0)/Math.min(SL.length,7)||0;
+  $("sleep-stats").innerHTML=`<div class="stat-card"><div class="stat-label">Last Night</div><div class="stat-value" style="color:var(--navy)">${last.hrs||"—"}<span class="stat-unit">hrs</span></div></div><div class="stat-card"><div class="stat-label">7-Day Avg</div><div class="stat-value" style="color:var(--blue)">${avg7?avg7.toFixed(1):"—"}<span class="stat-unit">hrs</span></div></div><div class="stat-card"><div class="stat-label">Quality</div><div class="stat-value" style="color:${last.quality>=7?"var(--green)":last.quality>=5?"var(--orange)":"var(--red)"}">${last.quality||"—"}<span class="stat-unit">/10</span></div></div><div class="stat-card"><div class="stat-label">Entries</div><div class="stat-value" style="color:var(--purple)">${SL.length}</div></div>`;
+  if(SL.length>0){$("sleep-hist-card").style.display="block";setTimeout(drawSleepChart,50);$("sleep-hist").innerHTML=SL.slice(0,7).map((s,i)=>`<div class="log-row"><span style="color:var(--text-muted);min-width:68px">${fmtD(s.date)}</span><span style="font-family:var(--font-mono);font-size:12px">${s.hrs}h · Q:${s.quality}/10${s.bed?" · Bed:"+s.bed:""}${s.wake?" · Up:"+s.wake:""}</span><button onclick="delSleep(${i})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px">×</button></div>`).join("")}else $("sleep-hist-card").style.display="none";
+}
+function saveSleep(){
+  const h=$("sl-hrs").value;if(!h)return;
+  const e={date:$("sl-date").value,hrs:+h,quality:+$("sl-qual").value||0,bed:$("sl-bed").value,wake:$("sl-wake").value};
+  SL=[e,...SL];ss("sleepLog",SL);
+  $("sl-hrs").value="";$("sl-qual").value="";$("sl-bed").value="";$("sl-wake").value="";
+  rSleep();toast("✓ Sleep logged");
+}
+function delSleep(i){SL=SL.filter((_,x)=>x!==i);ss("sleepLog",SL);rSleep();toast("Removed")}
+function drawSleepChart(){
+  const c=$("sleepChart");if(!c||!SL.length)return;
+  const data=[...SL].reverse().slice(-14);
+  const W=c.parentElement.offsetWidth-40||300;c.width=W;c.height=160;
+  const ctx=c.getContext("2d");ctx.clearRect(0,0,W,160);
+  const pl=30,pr=20,pt=10,pb=30,cW=W-pl-pr,cH=120-pt;
+  const maxH=9,minH=4;
+  ctx.strokeStyle="#d4d9e3";ctx.lineWidth=1;
+  [4,5,6,7,8,9].forEach(h=>{const y=pt+cH-(h-minH)/(maxH-minH)*cH;ctx.beginPath();ctx.moveTo(pl,y);ctx.lineTo(W-pr,y);ctx.stroke();ctx.fillStyle="#8892a4";ctx.font="10px monospace";ctx.textAlign="right";ctx.fillText(h,pl-3,y+3)});
+  // 7-9h target band
+  const y7=pt+cH-(7-minH)/(maxH-minH)*cH,y9=pt+cH-(9-minH)/(maxH-minH)*cH;
+  ctx.fillStyle="rgba(45,150,89,.08)";ctx.fillRect(pl,y9,cW,y7-y9);
+  const bW=Math.max(8,(cW/data.length)-4),gap=(cW-(bW*data.length))/(data.length+1);
+  data.forEach((s,i)=>{
+    const x=pl+gap+(i*(bW+gap));const h=Math.min(maxH,Math.max(minH,s.hrs));
+    const bH=(h-minH)/(maxH-minH)*cH;const y=pt+cH-bH;
+    const col=h>=7&&h<=9?"var(--green)":h>=6?"var(--orange)":"var(--red)";
+    ctx.fillStyle=col;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,bW,bH,3);else ctx.rect(x,y,bW,bH);ctx.fill();
+    ctx.fillStyle="#8892a4";ctx.font="9px sans-serif";ctx.textAlign="center";
+    if(i%Math.max(1,Math.floor(data.length/5))===0)ctx.fillText(fmtD(s.date),x+bW/2,158);
+  });
+}
+
+// ── SUPPLEMENTS ───────────────────────────────────────────────────────────────
+const SLIB={creatine:{name:"Creatine Monohydrate",mech:"Increases phosphocreatine for ATP regeneration. Increases intramuscular water retention.",ev:"Grade A. Kreider et al. (2017, JISSN): +8% strength, +14% power. 500+ studies.",dose:"3-5g/day. Post-workout with carbs slightly improves uptake. No loading required.",safe:"Excellent. No kidney damage in healthy individuals (Poortmans & Francaux, 2000).",int:"No adverse interactions. May improve glycemic control (Gualano et al., 2011)."},hmb:{name:"HMB (β-Hydroxy β-Methylbutyrate)",mech:"Leucine metabolite. Reduces muscle protein breakdown via ubiquitin-proteasome inhibition.",ev:"Grade B. Nissen & Sharp (2003): ~0.28% lean mass increase per study. Best during deficit.",dose:"3g/day in 3×1g doses with meals.",safe:"Well-tolerated.",int:"Synergistic with creatine. No lipid or glucose interactions."},"beta-alanine":{name:"Beta-Alanine",mech:"Carnosine precursor. Buffers H+ during high-intensity exercise, delaying fatigue.",ev:"Grade A. Hobson et al. (2012) meta-analysis: improved capacity for 1-4 minute efforts.",dose:"3.2-6.4g/day in divided doses. Takes 4-6 weeks to saturate.",safe:"Tingling (paresthesia) is harmless. Use sustained-release to reduce.",int:"No interactions."},"fish oil":{name:"Fish Oil (EPA/DHA)",mech:"Reduces inflammation (TNF-α, IL-6), improves endothelial function, lowers TG.",ev:"Grade A. REDUCE-IT (2019): 25% relative CVD risk reduction at 4g EPA. TG down 25-30%.",dose:"1-2g EPA+DHA daily. 2-4g for TG reduction. Take with fat-containing meal.",safe:"Enteric coating reduces fish burps. Caution with anticoagulants.",int:"Directly addresses hyperlipidemia. May improve insulin sensitivity."},magnesium:{name:"Magnesium Glycinate",mech:"Cofactor in 300+ reactions. ATP, protein synthesis, glucose metabolism. ~50% deficiency rate.",ev:"Grade A. Improves sleep (Abbasi 2012), insulin sensitivity (Mooren 2011), Veronese (2016): 22% lower T2DM risk.",dose:"200-400mg at bedtime. Glycinate has best absorption. Avoid oxide.",safe:"GI distress at high doses. Start at 200mg.",int:"Beneficial for prediabetes. Space 2h from thyroid meds."},"vitamin d":{name:"Vitamin D3 + K2",mech:"Secosteroid regulating calcium, immune, muscle function.",ev:"Grade A for deficiency. D2d trial (Pittas 2019): reduced T2DM progression at 4000 IU/day.",dose:"2000-4000 IU D3 + 100mcg K2 (MK-7) daily with food. Target 40-60 ng/mL.",safe:"Toxicity rare below 10,000 IU/day.",int:"Beneficial for prediabetes."},berberine:{name:"Berberine",mech:"AMPK activator (similar to metformin). Improves insulin sensitivity, reduces hepatic glucose output.",ev:"Grade A. Yin et al. (2008): comparable HbA1c reduction to metformin. Dong (2012): reduced FBG, TG, LDL.",dose:"500mg 2-3x/day with meals. Start low for GI tolerance.",safe:"GI side effects initially. Do not combine with metformin without physician supervision.",int:"Addresses BOTH prediabetes AND hyperlipidemia. Inhibits CYP3A4/2D6. May potentiate statins."},psyllium:{name:"Psyllium Husk",mech:"Viscous gel slows glucose absorption and binds bile acids for LDL excretion.",ev:"Grade A. Wei (2009): 5-10g/day reduces LDL ~7mg/dL. FDA health claim.",dose:"5g before lunch and dinner. Increase gradually. Take with full glass of water.",safe:"Space 2h from medications.",int:"Addresses both prediabetes and hyperlipidemia."},ashwagandha:{name:"Ashwagandha (KSM-66)",mech:"Adaptogen modulating HPA axis cortisol.",ev:"Grade B. Wankhede (2015): greater strength gains with training. Chandrasekhar (2012): 27% cortisol reduction. Salve (2019): improved sleep.",dose:"300-600mg standardized extract at bedtime.",safe:"Well-tolerated. Caution with hyperthyroidism.",int:"No significant metabolic interactions. Supports sleep and recovery."},"l-theanine":{name:"L-Theanine",mech:"GABA and dopamine modulation, promotes alpha-wave activity without sedation.",ev:"Grade B. Nobre et al. (2008): reduces anxiety and improves attention. Beneficial for sleep onset. Often combined with caffeine.",dose:"100-200mg for relaxation. 200mg at bedtime for sleep.",safe:"Very safe. No dependence.",int:"No interactions."},melatonin:{name:"Melatonin",mech:"Circadian signal, not a sleep inducer. Shifts the timing of sleep onset.",ev:"Grade A for jet lag. Grade B for delayed sleep phase. Low doses (0.5-1mg) are as effective as high doses.",dose:"0.5-1mg, 30-60 min before desired sleep time. Avoid 5-10mg — supraphysiological.",safe:"Short-term safe. Avoid chronic high doses.",int:"No significant interactions."}};
+function rSupps(){$("supp-stack").innerHTML=P.supplements.map(s=>`<span class="tag">${s}</span>`).join("")}
+function lookupSupp(){const q=$("supp-q").value.toLowerCase().trim();if(!q)return;const k=Object.keys(SLIB).find(k=>q.includes(k)||k.split("-").some(w=>q.includes(w)));if(k){const s=SLIB[k];$("supp-look").textContent=`${s.name}\n\nMechanism: ${s.mech}\n\nEvidence: ${s.ev}\n\nDosing: ${s.dose}\n\nSafety: ${s.safe}\n\nInteractions: ${s.int}`}else $("supp-look").textContent=`"${q}" not found.\n\nAvailable: ${Object.values(SLIB).map(s=>s.name).join(", ")}.\n\nFor others, see Examine.com.`}
+function showSugg(){
+  let o=`Stack Analysis for ${P.name}\nCurrent: ${P.supplements.join(", ")}\n\nCURRENT STACK ASSESSMENT\nCreatine: Grade A — core recomposition supplement. Keep at 5g/day.\nHMB: Grade B — useful during caloric deficit. Appropriate for current phase.\nBeta-alanine: Grade A — 3.2g/day for work capacity.\nFish oil: Grade A — directly addresses hyperlipidemia. Ensure ≥2g EPA+DHA.\n\nSUGGESTED ADDITIONS:\n\n`;
+  if(!P.supplements.some(s=>s.toLowerCase().includes("magnesium")))o+="1. Magnesium Glycinate (Grade A) — deficiency is common, improves sleep, insulin sensitivity, and recovery. 200-400mg at bedtime.\n\n";
+  if(!P.supplements.some(s=>s.toLowerCase().includes("vitamin d")))o+="2. Vitamin D3 + K2 (Grade A) — critical at northern latitudes. D2d trial: reduced T2DM progression. 2000-4000 IU D3 + 100mcg K2 daily.\n\n";
+  if(P.conditions.includes("prediabetes"))o+="3. Berberine (Grade A) — AMPK activator comparable to metformin for HbA1c. Also lowers LDL and TG. 500mg 2-3x/day with meals. Check drug interactions first.\n\n";
+  if(P.conditions.includes("hyperlipidemia"))o+="4. Psyllium Husk (Grade A, FDA health claim) — 5g before meals reduces LDL ~7mg/dL and blunts postprandial glucose.\n\n";
+  o+="For sleep: consider Magnesium Glycinate + Ashwagandha (KSM-66) before bed — addresses both sleep quality and cortisol.\n\nNO REDUNDANCIES in current stack.";
+  $("supp-sugg").textContent=o;
+}
+
+
+// ── APPLE HEALTH IMPORT ───────────────────────────────────────────────────────
+function rImport(){
+  const today = toDay();
+  const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(sixMonthsAgo.getMonth()-6);
+  if(!$("imp-from").value) $("imp-from").value = sixMonthsAgo.toISOString().slice(0,10);
+  if(!$("imp-to").value)   $("imp-to").value   = today;
+}
+
+function handleFileDrop(e){
+  e.preventDefault();
+  $("imp-dropzone").style.borderColor="var(--border)";
+  const file = e.dataTransfer.files[0];
+  if(file) processHealthFile(file);
+}
+function handleFileSelect(e){
+  const file = e.target.files[0];
+  if(file) processHealthFile(file);
+}
+
+function setProgress(pct, msg){
+  $("imp-status").style.display="block";
+  $("imp-status-text").textContent = msg;
+  $("imp-bar").style.width = pct+"%";
+  $("imp-bar").style.background = pct===100 ? "var(--green)" : "var(--blue)";
+}
+
+async function processHealthFile(file){
+  $("imp-results").style.display="none";
+  $("imp-results").innerHTML="";
+  setProgress(5, "Reading file…");
+
+  try {
+    let xmlText = "";
+
+    if(file.name.toLowerCase().endsWith(".zip")){
+      setProgress(15,"Unzipping Apple Health export…");
+      // Read ZIP manually — find the export.xml by locating its local file header
+      const buf = await file.arrayBuffer();
+      const bytes = new Uint8Array(buf);
+      setProgress(30,"Locating health data in ZIP…");
+
+      // Find export.xml inside ZIP using local file header signature (PK\x03\x04)
+      xmlText = await extractXmlFromZip(bytes);
+      if(!xmlText){
+        setProgress(0,"❌ Could not extract export.xml from the ZIP.\n\nTry this instead:\n1. Find export.zip in Files app\n2. Tap it to unzip — it creates a folder\n3. Inside the folder, find export.xml\n4. Come back here and select export.xml directly");
+        return;
+      }
+    } else if(file.name.toLowerCase().endsWith(".xml")){
+      setProgress(20,"Reading XML file…");
+      xmlText = await file.text();
+    } else {
+      setProgress(0,"❌ Please select export.zip or export.xml from Apple Health.\n\nTo export: Health app → profile photo → Export All Health Data");
+      return;
+    }
+
+    setProgress(50,"Parsing health records…");
+    await new Promise(r=>setTimeout(r,20));
+    parseAndImport(xmlText);
+
+  } catch(err){
+    setProgress(0,"❌ Error reading file: "+err.message+"\n\nIf the file is very large (>200MB), try:\n1. Unzip export.zip on your phone (tap it in Files)\n2. Select the export.xml file directly instead");
+    console.error(err);
+  }
+}
+
+async function extractXmlFromZip(bytes){
+  // Walk ZIP central directory to find export.xml
+  // Try DecompressionStream (Chrome/Edge/Safari 16.4+) first, then fallback
+  const dec = new TextDecoder();
+  const PK_LOCAL = 0x04034b50;
+  const view = new DataView(bytes.buffer);
+  let offset = 0;
+
+  while(offset < bytes.length - 30){
+    const sig = view.getUint32(offset, true);
+    if(sig !== PK_LOCAL){ offset++; continue; }
+    const compression = view.getUint16(offset+8, true);
+    const compSize    = view.getUint32(offset+18, true);
+    const uncompSize  = view.getUint32(offset+22, true);
+    const fnLen       = view.getUint16(offset+26, true);
+    const extraLen    = view.getUint16(offset+28, true);
+    const filename    = dec.decode(bytes.slice(offset+30, offset+30+fnLen));
+    const dataStart   = offset + 30 + fnLen + extraLen;
+    const dataEnd     = dataStart + compSize;
+
+    if(filename.endsWith("export.xml")){
+      setProgress(40,"Decompressing export.xml…");
+      const compressed = bytes.slice(dataStart, dataEnd);
+      if(compression === 0){
+        // Stored (no compression)
+        return dec.decode(compressed);
+      } else if(compression === 8){
+        // Deflate — use DecompressionStream if available
+        if(typeof DecompressionStream !== "undefined"){
+          try {
+            const ds = new DecompressionStream("deflate-raw");
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(compressed);
+            writer.close();
+            const chunks = [];
+            while(true){
+              const {done, value} = await reader.read();
+              if(done) break;
+              chunks.push(value);
+            }
+            const total = chunks.reduce((a,c)=>a+c.length,0);
+            const result = new Uint8Array(total);
+            let pos = 0;
+            for(const c of chunks){ result.set(c,pos); pos+=c.length; }
+            return dec.decode(result);
+          } catch(e){
+            // DecompressionStream failed — tell user to use XML directly
+            return null;
+          }
+        } else {
+          return null; // Browser doesn't support DecompressionStream
+        }
+      }
+    }
+    offset = dataEnd;
+    if(dataEnd <= offset) offset++;
+  }
+  return null;
+}
+
+function parseAndImport(xmlText){
+  const fromDate = $("imp-from").value;
+  const toDate   = $("imp-to").value;
+  const doWeight    = $("imp-weight").checked;
+  const doSleep     = $("imp-sleep").checked;
+  const doWorkouts  = $("imp-workouts").checked;
+  const doActivity  = $("imp-activity").checked;
+
+  setProgress(60,"Scanning records…");
+
+  const inRange = d => {
+    if(!d) return false;
+    const ds = d.slice(0,10);
+    if(fromDate && ds < fromDate) return false;
+    if(toDate   && ds > toDate)   return false;
+    return true;
+  };
+
+  // Regex-based parsing — much more memory-efficient than DOMParser on large files
+  const counts = {weight:0, bodyfat:0, sleep:0, workouts:0, steps:0, hrv:0};
+
+  // Helper: extract attribute value from a tag string
+  const attr = (tag, name) => {
+    const m = tag.match(new RegExp(name+'=["\']([^"\']*)["\']'));
+    return m ? m[1] : "";
+  };
+
+
+
+  // ── WEIGHT ──────────────────────────────────────────────────────────────────
+  if(doWeight){
+    setProgress(65,"Importing weight & body fat…");
+    const weightByDate={}, bfByDate={};
+    const recRe = /<Record[^>]+>/g;
+    let m;
+    while((m=recRe.exec(xmlText))!==null){
+      const tag=m[0];
+      const type=attr(tag,"type");
+      const date=(attr(tag,"startDate")||"").slice(0,10);
+      if(!inRange(date)) continue;
+      const val=parseFloat(attr(tag,"value"));
+      if(isNaN(val)) continue;
+      if(type==="HKQuantityTypeIdentifierBodyMass"){
+        const unit=attr(tag,"unit").toLowerCase();
+        const lbs=unit.includes("kg")?Math.round(val*2.2046*10)/10:Math.round(val*10)/10;
+        if(!weightByDate[date]) weightByDate[date]=lbs;
+        counts.weight++;
+      } else if(type==="HKQuantityTypeIdentifierBodyFatPercentage"){
+        const pct=val<1?Math.round(val*1000)/10:Math.round(val*10)/10;
+        if(!bfByDate[date]) bfByDate[date]=pct;
+        counts.bodyfat++;
+      }
+    }
+    Object.entries(weightByDate).forEach(([date,weight])=>{
+      const existing=BL.find(e=>e.date===date);
+      if(existing){existing.weight=weight;if(bfByDate[date])existing.bodyfat=bfByDate[date];}
+      else BL.push({date,weight,bodyfat:bfByDate[date]||null,waist:null});
+    });
+    BL.sort((a,b)=>a.date.localeCompare(b.date));
+    ss("bodyLog",BL);
+  }
+
+  // ── SLEEP ────────────────────────────────────────────────────────────────────
+  if(doSleep){
+    setProgress(73,"Importing sleep…");
+    const sleepByDate={};
+    const sleepRe=/<Record[^>]+HKCategoryTypeIdentifierSleepAnalysis[^>]+>/g;
+    let sm;
+    while((sm=sleepRe.exec(xmlText))!==null){
+      const tag=sm[0];
+      const val=attr(tag,"value");
+      if(!val.includes("Asleep")&&val!=="HKCategoryValueSleepAnalysisAsleepUnspecified") continue;
+      const start=attr(tag,"startDate");
+      const end=attr(tag,"endDate");
+      if(!start||!end) continue;
+      const date=start.slice(0,10);
+      if(!inRange(date)) continue;
+      const mins=(new Date(end)-new Date(start))/60000;
+      if(mins<5) continue;
+      if(!sleepByDate[date]) sleepByDate[date]={totalMin:0,bed:start,wake:end};
+      sleepByDate[date].totalMin+=mins;
+      if(start<sleepByDate[date].bed) sleepByDate[date].bed=start;
+      if(end>sleepByDate[date].wake)  sleepByDate[date].wake=end;
+    }
+    Object.entries(sleepByDate).forEach(([date,s])=>{
+      if(s.totalMin<60) return;
+      const hrs=Math.round(s.totalMin/6)/10;
+      if(!SL.find(e=>e.date===date)){
+        SL.unshift({date,hrs,quality:0,bed:s.bed.slice(11,16),wake:s.wake.slice(11,16)});
+        counts.sleep++;
+      }
+    });
+    SL.sort((a,b)=>b.date.localeCompare(a.date));
+    ss("sleepLog",SL);
+  }
+
+  // ── WORKOUTS ─────────────────────────────────────────────────────────────────
+  if(doWorkouts){
+    setProgress(81,"Importing workouts…");
+    const typeMap={"Running":"Cardio","Cycling":"Zone 2 Cardio","Walking":"Walk","Hiking":"Walk",
+      "TraditionalStrengthTraining":"Full Body","FunctionalStrengthTraining":"Full Body",
+      "HighIntensityIntervalTraining":"HIIT","Yoga":"Full Body","Swimming":"Cardio",
+      "Elliptical":"Zone 2 Cardio","StairClimbing":"Cardio","Pilates":"Full Body",
+      "CrossTraining":"Full Body","MixedCardio":"Zone 2 Cardio","CoreTraining":"Full Body"};
+    const wkRe=/<Workout[^>]+>/g;
+    let wm;
+    while((wm=wkRe.exec(xmlText))!==null){
+      const tag=wm[0];
+      const act=attr(tag,"workoutActivityType").replace("HKWorkoutActivityType","");
+      const start=attr(tag,"startDate");
+      const end=attr(tag,"endDate");
+      if(!start) continue;
+      const date=start.slice(0,10);
+      if(!inRange(date)) continue;
+      const dur=Math.round((new Date(end)-new Date(start))/60000);
+      const cal=Math.round(parseFloat(attr(tag,"totalEnergyBurned")||"0"));
+      const type=typeMap[act]||"Full Body";
+      const label=act.replace(/([A-Z])/g," $1").trim();
+      const id=new Date(start).getTime();
+      if(!TL.some(s=>Math.abs(s.id-id)<3600000)){
+        TL.unshift({id,date,type,exercises:[{name:label+(dur?" ("+dur+"min)":""),muscle:type.includes("Cardio")||type==="Walk"?"Cardio":"Core",sets:[],totalReps:0,source:"Apple Health",durationMin:dur,calories:cal}]});
+        counts.workouts++;
+      }
+    }
+    TL.sort((a,b)=>b.date.localeCompare(a.date));
+    ss("trainLog",TL);
+  }
+
+  // ── STEPS & HRV ──────────────────────────────────────────────────────────────
+  if(doActivity){
+    setProgress(89,"Importing steps & HRV…");
+    const stepsByDate={}, hrvByDate={};
+    const actRe=/<Record[^>]+>/g;
+    let am;
+    while((am=actRe.exec(xmlText))!==null){
+      const tag=am[0];
+      const type=attr(tag,"type");
+      const date=(attr(tag,"startDate")||"").slice(0,10);
+      if(!inRange(date)) continue;
+      const val=parseFloat(attr(tag,"value"));
+      if(isNaN(val)) continue;
+      if(type==="HKQuantityTypeIdentifierStepCount"){
+        stepsByDate[date]=(stepsByDate[date]||0)+val;
+        counts.steps++;
+      } else if(type==="HKQuantityTypeIdentifierHeartRateVariabilitySDNN"){
+        if(!hrvByDate[date]) hrvByDate[date]={sum:0,n:0};
+        hrvByDate[date].sum+=val; hrvByDate[date].n++;
+        counts.hrv++;
+      }
+    }
+    const allD=new Set([...Object.keys(stepsByDate),...Object.keys(hrvByDate)]);
+    allD.forEach(date=>{
+      const steps=Math.round(stepsByDate[date]||0);
+      const hrv=hrvByDate[date]?Math.round(hrvByDate[date].sum/hrvByDate[date].n):0;
+      const ex=AL.find(e=>e.date===date);
+      if(ex){if(steps)ex.steps=steps;if(hrv)ex.hrv=hrv;}
+      else AL.unshift({id:Date.now()+Math.random(),date,steps,hrv,z2min:0,activeMin:0,source:"Apple Health"});
+    });
+    AL.sort((a,b)=>b.date.localeCompare(a.date));
+    ss("actLog",AL);
+  }
+
+  setProgress(100,"✓ Import complete!");
+
+  // Show results summary
+  const total = counts.weight+counts.sleep+counts.workouts+counts.steps;
+  const rows = [
+    doWeight   && counts.weight   ? `<div class="log-row">⚖️ Weight entries<span style="font-weight:700;color:var(--green)">${counts.weight} imported</span></div>` : "",
+    doWeight   && counts.bodyfat  ? `<div class="log-row">📊 Body fat entries<span style="font-weight:700;color:var(--green)">${counts.bodyfat} imported</span></div>` : "",
+    doSleep    && counts.sleep    ? `<div class="log-row">😴 Sleep nights<span style="font-weight:700;color:var(--green)">${counts.sleep} imported</span></div>` : "",
+    doWorkouts && counts.workouts ? `<div class="log-row">🏋️ Workouts<span style="font-weight:700;color:var(--green)">${counts.workouts} imported</span></div>` : "",
+    doActivity && counts.steps    ? `<div class="log-row">🚶 Days with step data<span style="font-weight:700;color:var(--green)">${counts.steps} imported</span></div>` : "",
+    doActivity && counts.hrv      ? `<div class="log-row">💓 Days with HRV data<span style="font-weight:700;color:var(--green)">${counts.hrv} imported</span></div>` : "",
+  ].filter(Boolean).join("");
+
+  $("imp-results").style.display="block";
+  $("imp-results").innerHTML = total > 0
+    ? `<div class="card" style="border-color:var(--green)">
+        <div style="font-weight:700;font-size:14px;color:var(--green);margin-bottom:12px">✓ Import Successful</div>
+        ${rows}
+        <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">Switch to the Body, Training, Sleep, or Training tabs to see your imported data.</div>
+       </div>`
+    : `<div class="card" style="border-color:var(--orange)">
+        <div style="font-weight:700;color:var(--orange);margin-bottom:8px">⚠️ No new data found</div>
+        <div style="font-size:13px;color:var(--text-mid)">The selected date range may not contain new records, or the data types may already be logged. Try expanding the date range or check that you selected the correct checkboxes.</div>
+       </div>`;
+
+  toast("✓ Import complete — "+total+" entries added");
+}
+
+
+function openProf(){$("p-name").value=P.name;$("p-age").value=P.age;$("p-wt").value=P.weightLbs;$("p-gwt").value=P.goalWeight;$("p-ht").value=P.heightIn;$("p-sex").value=P.sex;$("p-act").value=P.activityLevel;$("p-cond").value=P.conditions.join(", ");$("p-supp").value=P.supplements.join(", ");$("prof-modal").classList.add("open")}
+function closeProf(){$("prof-modal").classList.remove("open")}
+function saveProf(){P={name:$("p-name").value,age:+$("p-age").value,sex:$("p-sex").value,heightIn:+$("p-ht").value,weightLbs:+$("p-wt").value,goalWeight:+$("p-gwt").value,activityLevel:$("p-act").value,conditions:$("p-cond").value.split(",").map(s=>s.trim()).filter(Boolean),supplements:$("p-supp").value.split(",").map(s=>s.trim()).filter(Boolean),goal:selGoal};ss("profile",P);closeProf();$("profile-btn").textContent=P.name+" · "+P.weightLbs+" lbs ✏️";rBody();rNutr();rSupps();updateZ2HR();toast("✓ Profile saved")}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded",()=>{
+  $("profile-btn").textContent=P.name+" · "+P.weightLbs+" lbs ✏️";
+  $("b-date").value=toDay();$("s-date").value=toDay();$("m-date").value=toDay();$("a-date").value=toDay();$("sl-date").value=toDay();
+  rBody();rGoals();rSupps();updateZ2HR();initHeightFields();rImport();
+  // Close food results when tapping outside
+  document.addEventListener("click",(e)=>{
+    const fr=$("food-results"), fs=$("food-search");
+    if(fr&&fs&&!fr.contains(e.target)&&e.target!==fs){
+      fr.style.display="none";
+    }
+  });
+});
+window.addEventListener("resize",()=>{drawBodyChart();drawVolChart();drawSleepChart()});
+</script>
+</body>
+</html>
